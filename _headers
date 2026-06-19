@@ -1,0 +1,15 @@
+# Netlify headers — Copa 2026 PWA
+
+# index.html: nunca cachear (dados de jogos mudam constantemente)
+/index.html
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0
+
+# Service worker: sempre buscar versão nova
+/sw.js
+  Cache-Control: no-cache, no-store, must-revalidate
+
+# Manifest: pode cachear por 1h
+/manifest.json
+  Cache-Control: public, max-age=3600
