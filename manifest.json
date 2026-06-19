@@ -1,0 +1,1707 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a1628">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Copa 2026">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="description" content="Copa do Mundo 2026 — grupos, resultados reais, chaveamento, cartões e escanteios">
+<link rel="manifest" href="./manifest.json">
+<title>Copa do Mundo 2026</title>
+<style>*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{height:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#081410;color:#eef5f1;font-size:14px;line-height:1.5;min-height:100%;padding-bottom:env(safe-area-inset-bottom)}
+
+/* ── TOPBAR estilo casa de apostas ── */
+.topbar{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,#06241a 0%,#0a3625 55%,#0d4530 100%);color:#fff;padding:12px 16px;padding-top:max(12px, env(safe-area-inset-top));display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 16px rgba(0,0,0,.4);border-bottom:1px solid rgba(255,215,90,.15)}
+.topbar-title{font-size:17px;font-weight:800;letter-spacing:-.01em;display:flex;align-items:center;gap:6px}
+.topbar-title .gold{color:#ffd75a}
+.topbar-sub{font-size:10px;color:#5ee8a8;margin-top:1px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.sync-btn{display:flex;align-items:center;gap:5px;background:rgba(255,215,90,.12);border:1px solid rgba(255,215,90,.4);color:#ffd75a;font-size:11px;font-weight:800;padding:6px 12px;border-radius:20px;cursor:pointer}
+.sync-btn:active{background:rgba(255,215,90,.22)}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:#3ddc84;flex-shrink:0;box-shadow:0 0 6px #3ddc84}
+.sync-dot.syncing{background:#ffd75a;animation:pulse 1s infinite;box-shadow:0 0 6px #ffd75a}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+
+.shell{max-width:700px;margin:0 auto;padding:16px 16px 32px}
+
+/* ── DATA INTEGRITY BANNER ── */
+.source-banner{background:#0d2419;border:1px solid #1a4030;border-left:4px solid #ffd75a;border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:13px;color:#a8c2b4;line-height:1.6}
+.source-banner b{color:#ffd75a}
+
+/* ── PHASE BAR ── */
+.phase-bar{background:linear-gradient(135deg,#0d2b1d,#0a3625);border:1px solid #1a4030;border-radius:14px;padding:14px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 20px rgba(0,0,0,.25)}
+.phase-lbl{font-size:10px;color:#5ee8a8;text-transform:uppercase;letter-spacing:.05em;font-weight:800}
+.phase-val{font-size:15px;font-weight:800;color:#fff;margin-top:2px}
+.phase-right{text-align:right}
+.phase-day{font-size:11px;color:#a8c2b4;font-weight:600}
+.phase-count{font-size:11px;font-weight:700;color:#ffd75a;margin-top:2px}
+
+/* ── MÉTRICAS estilo cassino ── */
+.metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px}
+@media(min-width:480px){.metrics{grid-template-columns:repeat(4,1fr)}}
+.mcard{border-radius:12px;padding:12px 14px;color:#fff;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:transform .15s,box-shadow .15s}
+.mcard:active{transform:scale(.97)}
+.mcard.c1{background:linear-gradient(135deg,#0d3d6b,#0a2750)}
+.mcard.c2{background:linear-gradient(135deg,#0d7a4a,#0a4d30)}
+.mcard.c3{background:linear-gradient(135deg,#b8860b,#7a5a06);box-shadow:0 0 18px rgba(184,134,11,.25)}
+.mcard.c4{background:linear-gradient(135deg,#a32d2d,#6e1e1e)}
+
+/* ── BANNER DE ATUALIZAÇÃO ── */
+.update-banner{display:none;background:#ffd75a;color:#06241a;padding:10px 16px;font-size:12px;font-weight:800;text-align:center;cursor:pointer;position:sticky;top:58px;z-index:95}
+.update-banner.show{display:block}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:999;align-items:flex-end;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal-box{background:#0d2419;border:1px solid #1a4030;border-top:3px solid #ffd75a;border-radius:18px 18px 0 0;width:100%;max-width:700px;max-height:85vh;overflow-y:auto;padding:0 0 env(safe-area-inset-bottom)}
+.modal-hdr{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid #1a4030;position:sticky;top:0;background:#0d2419;z-index:1}
+.modal-title{font-size:14px;font-weight:800;color:#ffd75a}
+.modal-close{background:none;border:none;color:#5d7e6f;font-size:22px;cursor:pointer;line-height:1;padding:0}
+.modal-body{padding:16px 18px}
+.modal-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #122e22}
+.modal-row:last-child{border-bottom:none}
+.modal-row-label{font-size:12px;color:#a8c2b4;display:flex;align-items:center;gap:7px}
+.modal-row-val{font-size:14px;font-weight:800;color:#ffd75a}
+.modal-row-val.green{color:#3ddc84}
+.modal-row-val.red{color:#ff4d5e}
+.modal-row-val.blue{color:#3a9bff}
+.modal-section-ttl{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#5ee8a8;margin:14px 0 6px}
+.mcard-lbl{font-size:10px;opacity:.85;margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em;font-weight:700}
+.mcard-val{font-size:19px;font-weight:800}
+.mcard-sub{font-size:10px;opacity:.85;margin-top:2px;font-weight:600}
+
+/* ── TABS estilo apostas ── */
+.tabs-wrap{position:sticky;top:58px;z-index:90;background:#081410;padding:0 0 1px;border-bottom:1px solid #1a4030;margin:0 -16px 16px;overflow-x:auto;white-space:nowrap;scrollbar-width:none}
+.tabs-wrap::-webkit-scrollbar{display:none}
+.tabs{display:inline-flex;gap:0;padding:0 16px}
+.tab{padding:11px 16px;font-size:12px;font-weight:700;cursor:pointer;border:none;background:none;color:#5d7e6f;border-bottom:3px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tab.active{color:#ffd75a;border-bottom-color:#ffd75a}
+.panel{display:none}
+.panel.active{display:block}
+
+/* ── TICKER ── */
+.ticker-card{background:#0d2419;border:1px solid #1a4030;border-radius:12px;padding:12px 14px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-left:4px solid #1a4030}
+.ticker-card.finished{border-left-color:#3ddc84}
+.ticker-card.live{border-left-color:#ff4d5e;box-shadow:0 0 14px rgba(255,77,94,.12)}
+.ticker-card.scheduled{border-left-color:#3a9bff}
+.ticker-status{display:flex;align-items:center;gap:6px;flex-shrink:0;width:64px}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#ff4d5e;animation:pulse 1.2s infinite;flex-shrink:0;box-shadow:0 0 8px #ff4d5e}
+.ticker-status-txt{font-size:9px;font-weight:800;text-transform:uppercase}
+.ticker-status-txt.finished{color:#3ddc84}
+.ticker-status-txt.live{color:#ff4d5e}
+.ticker-status-txt.scheduled{color:#3a9bff}
+.ticker-time{font-size:10px;color:#5d7e6f;font-weight:600}
+.ticker-match{flex:1;display:flex;align-items:center;justify-content:center;gap:10px}
+.ticker-team{font-size:13px;font-weight:800;color:#eef5f1;text-align:right;flex:1}
+.ticker-team.away{text-align:left}
+.ticker-score{font-size:16px;font-weight:800;color:#ffd75a;background:#06241a;padding:4px 12px;border-radius:8px;min-width:54px;text-align:center;border:1px solid #1a4030}
+.ticker-group{font-size:9px;color:#5d7e6f;flex-shrink:0;width:50px;text-align:right;font-weight:700}
+.ticker-events{font-size:12px;color:#a8c2b4;padding:0 14px 11px;margin-top:-4px;line-height:1.5}
+
+/* ── GRUPOS ── */
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:10px;color:#7c9a8a;margin-bottom:12px;font-weight:600}
+.leg{display:flex;align-items:center;gap:4px}
+.ldot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.group-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.gtab{font-size:11px;font-weight:800;padding:6px 12px;border-radius:8px;border:1.5px solid #1a4030;background:#0d2419;color:#5d7e6f;cursor:pointer}
+.gtab.active{background:#ffd75a;color:#06241a;border-color:#ffd75a}
+.group-box{background:#0d2419;border:1px solid #1a4030;border-radius:14px;overflow:hidden;margin-bottom:14px}
+.group-box-hdr{padding:11px 14px;background:linear-gradient(135deg,#06241a,#0a3625);color:#fff;font-size:12px;font-weight:800;display:flex;justify-content:space-between;border-bottom:1px solid #1a4030}
+.group-box-hdr span{color:#5ee8a8;font-weight:600}
+.gt{width:100%;border-collapse:collapse;font-size:12px}
+.gt th{font-size:9px;font-weight:800;color:#5d7e6f;text-align:right;padding:8px 8px;border-bottom:1px solid #1a4030;text-transform:uppercase}
+.gt th:first-child,.gt th:nth-child(2){text-align:left}
+.gt td{padding:9px 8px;text-align:right;border-bottom:1px solid #122e22;color:#eef5f1;font-weight:600}
+.gt td:first-child{text-align:center;font-weight:800;color:#5d7e6f;width:24px}
+.gt td:nth-child(2){text-align:left;font-weight:800;display:flex;align-items:center;gap:6px}
+.gt tr:last-child td{border-bottom:none}
+.gt tr.qualified{background:rgba(61,220,132,.06)}
+.gt tr.playoff{background:rgba(255,215,90,.05)}
+.qualified-dot{width:6px;height:6px;border-radius:50%;background:#3ddc84;flex-shrink:0;box-shadow:0 0 4px #3ddc84}
+.thirdplace-dot{width:6px;height:6px;border-radius:50%;background:#ffd75a;flex-shrink:0;box-shadow:0 0 4px #ffd75a}
+.last-game{font-size:9px;font-weight:800;padding:1px 6px;border-radius:6px;color:#06241a;display:inline-block}
+.lg-v{background:#3ddc84}.lg-e{background:#5d7e6f;color:#fff}.lg-d{background:#ff4d5e;color:#fff}
+
+/* ── BRACKET ── */
+.bracket-note{background:#0d2419;border:1px dashed #1a4030;border-radius:12px;padding:14px;margin-bottom:14px;font-size:11px;color:#7c9a8a;line-height:1.6}
+.bracket-stage{margin-bottom:18px}
+.bracket-stage-ttl{font-size:11px;font-weight:800;color:#5ee8a8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.bracket-match{background:#0d2419;border:1px solid #1a4030;border-radius:10px;padding:10px 12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;font-size:12px}
+.bracket-slot{font-weight:700;color:#eef5f1}
+.bracket-slot.tbd{color:#5d7e6f;font-weight:600;font-style:italic}
+.bracket-vs{font-size:10px;color:#5d7e6f;padding:0 8px}
+.bracket-venue{font-size:9px;color:#5d7e6f;text-align:right;flex-shrink:0}
+
+/* ── JCARD (preditiva) ── */
+.jcard{background:#0d2419;border:1px solid #1a4030;border-radius:14px;margin-bottom:12px;overflow:hidden}
+.jc-meta{display:flex;justify-content:space-between;align-items:center;padding:9px 14px;background:#06241a;border-bottom:1px solid #1a4030}
+.jc-date{font-size:10px;color:#5d7e6f;font-weight:800}
+.jc-badges{display:flex;gap:5px;flex-wrap:wrap}
+.bdg{font-size:9px;font-weight:800;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.bdg-blue{background:rgba(58,155,255,.15);color:#6cb6ff}
+.bdg-low{background:rgba(61,220,132,.15);color:#5ee8a8}
+.bdg-med{background:rgba(255,215,90,.15);color:#ffd75a}
+.bdg-high{background:rgba(255,77,94,.15);color:#ff8896}
+.jc-clash{display:grid;grid-template-columns:1fr 32px 1fr;align-items:center;gap:6px;padding:14px;border-bottom:1px solid #1a4030}
+.jc-home{display:flex;flex-direction:column}
+.jc-away{display:flex;flex-direction:column;align-items:flex-end;text-align:right}
+.jc-cname{font-size:15px;font-weight:800;color:#fff;line-height:1.2}
+.jc-cname span{font-size:18px}
+.jc-ctag{font-size:10px;color:#5d7e6f;margin-top:2px;font-weight:600}
+.jc-vs{text-align:center;font-size:11px;font-weight:800;color:#3a4f44}
+.jc-prob{padding:12px 14px;border-bottom:1px solid #1a4030}
+.jc-prob-bar{display:flex;height:8px;border-radius:4px;overflow:hidden;gap:2px}
+.pb-h{background:#3a9bff}.pb-d{background:#3a4f44}.pb-a{background:#ff4d5e}
+.jc-prob-pcts{display:grid;grid-template-columns:1fr 1fr 1fr;font-size:12px;font-weight:800;margin-top:5px}
+.pp-h{color:#3a9bff}
+.pp-d{text-align:center;color:#5d7e6f;font-weight:600;font-size:10px}
+.pp-a{text-align:right;color:#ff4d5e}
+.jc-stats{padding:12px 14px;border-bottom:1px solid #1a4030}
+.jc-stats-ttl{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#5d7e6f;margin-bottom:10px}
+.jc-stats-row{display:grid;grid-template-columns:1fr 1px 1fr;align-items:start}
+.jc-sdiv{background:#1a4030;align-self:stretch}
+.jc-side{padding:0 14px 0 0}
+.jc-side.away{padding:0 0 0 14px;text-align:right}
+.jc-statline{display:flex;align-items:baseline;gap:10px;margin-bottom:7px}
+.jc-side.away .jc-statline{flex-direction:row-reverse}
+.jc-stat{display:flex;align-items:baseline;gap:3px}
+.jc-stat-val{font-size:18px;font-weight:800;line-height:1}
+.jc-stat-val.y{color:#ffd75a}
+.jc-stat-val.r{color:#ff4d5e}
+.jc-stat-val.c{color:#3a9bff}
+.jc-stat-lbl{font-size:9px;color:#5d7e6f;font-weight:700}
+.jc-icons{display:flex;gap:2px;flex-wrap:wrap;margin-bottom:8px}
+.jc-side.away .jc-icons{justify-content:flex-end}
+.ci{width:10px;height:14px;border-radius:2px;flex-shrink:0}
+.ci-y{background:#ffd75a}
+.ci-h{background:linear-gradient(90deg,#ffd75a 50%,#ff4d5e 50%)}
+.jc-footnote{font-size:9px;color:#5d7e6f;margin-top:6px;font-weight:600}
+.jc-foot{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;gap:12px}
+.jc-context{font-size:11px;color:#7c9a8a;line-height:1.5;flex:1}
+.jc-total{text-align:right;flex-shrink:0;border-left:1px solid #1a4030;padding-left:14px}
+.jc-total-lbl{font-size:9px;color:#5d7e6f;margin-bottom:2px;font-weight:800;text-transform:uppercase}
+.jc-total-y{font-size:15px;font-weight:800;color:#ffd75a}
+.jc-total-c{font-size:11px;font-weight:800;color:#3a9bff;margin-top:1px}
+
+/* ── HISTÓRICO DE CARTÕES ── */
+.hist-table{width:100%;border-collapse:collapse;font-size:11px}
+.hist-table th{font-size:9px;font-weight:800;color:#5d7e6f;padding:7px 8px;text-align:left;border-bottom:1px solid #1a4030;text-transform:uppercase;white-space:nowrap}
+.hist-table th:not(:first-child):not(:nth-child(2)){text-align:center}
+.hist-table td{padding:8px 8px;border-bottom:1px solid #122e22;color:#eef5f1;white-space:nowrap;font-weight:600}
+.hist-table td:not(:first-child):not(:nth-child(2)){text-align:center}
+.hist-table tr:last-child td{border-bottom:none}
+.hist-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -16px;padding:0 16px}
+.hist-table{min-width:480px}
+
+.empty-note{font-size:11px;color:#5d7e6f;text-align:center;padding:24px 0}
+.live-banner{background:linear-gradient(135deg,#06241a,#0a3625);color:#fff;border-radius:14px;padding:14px 16px;margin-bottom:14px;border:1px solid rgba(255,215,90,.15)}
+.live-banner-hdr{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.live-banner-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:#5ee8a8}
+.live-banner-txt{font-size:12px;line-height:1.6;color:#cfe6da}
+
+/* ── RANKING ── */
+.rank-cat-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.rcat{font-size:11px;font-weight:800;padding:7px 13px;border-radius:20px;border:1.5px solid #1a4030;background:#0d2419;color:#5d7e6f;cursor:pointer;display:flex;align-items:center;gap:5px}
+.rcat.active{background:linear-gradient(135deg,#ffd75a,#e8b923);color:#06241a;border-color:#ffd75a;box-shadow:0 0 14px rgba(255,215,90,.3)}
+.rank-board{background:#0d2419;border:1px solid #1a4030;border-radius:14px;overflow:hidden;margin-bottom:14px}
+.rank-board-hdr{padding:12px 14px;background:linear-gradient(135deg,#06241a,#0a3625);display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #1a4030}
+.rank-board-title{font-size:13px;font-weight:800;color:#fff;display:flex;align-items:center;gap:6px}
+.rank-board-sub{font-size:9px;color:#5ee8a8;font-weight:600}
+.rank-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid #122e22}
+.rank-row:last-child{border-bottom:none}
+.rank-row:nth-child(odd){background:rgba(255,255,255,.012)}
+.rank-pos{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
+.rank-pos.p1{background:linear-gradient(135deg,#ffd75a,#e8b923);color:#06241a;box-shadow:0 0 10px rgba(255,215,90,.4)}
+.rank-pos.p2{background:#c9d3da;color:#06241a}
+.rank-pos.p3{background:#d99a5b;color:#06241a}
+.rank-pos.pn{background:#1a4030;color:#7c9a8a}
+.rank-team{flex:1;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#eef5f1}
+.rank-bar-wrap{width:60px;height:5px;background:#1a4030;border-radius:3px;overflow:hidden;flex-shrink:0}
+.rank-bar-fill{height:5px;border-radius:3px}
+.rank-val{font-size:15px;font-weight:800;color:#ffd75a;min-width:34px;text-align:right;flex-shrink:0}
+.rank-sub{font-size:9px;color:#5d7e6f;min-width:54px;text-align:right;flex-shrink:0}
+
+.top10-board{background:linear-gradient(135deg,#0d2419,#0a1f15);border:1px solid #ffd75a;border-radius:14px;overflow:hidden;margin-bottom:16px;box-shadow:0 0 24px rgba(255,215,90,.08)}
+.top10-hdr{padding:14px 16px;background:linear-gradient(135deg,#b8860b,#7a5a06);display:flex;align-items:center;gap:8px}
+.top10-hdr-title{font-size:14px;font-weight:800;color:#fff}
+.top10-hdr-sub{font-size:10px;color:rgba(255,255,255,.85);margin-top:1px;font-weight:600}
+.top10-row{display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid #14301f}
+.top10-row:last-child{border-bottom:none}
+.top10-pos{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;background:#1a4030;color:#5ee8a8}
+.top10-pos.gold{background:linear-gradient(135deg,#ffd75a,#e8b923);color:#06241a;box-shadow:0 0 10px rgba(255,215,90,.35)}
+.top10-team{flex:1;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800;color:#fff}
+.top10-prob{font-size:13px;font-weight:800;color:#ffd75a}
+.top10-trend{font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px}
+.trend-up{background:rgba(61,220,132,.15);color:#5ee8a8}
+.trend-same{background:rgba(255,255,255,.06);color:#5d7e6f}
+.trend-down{background:rgba(255,77,94,.15);color:#ff8896}
+.top10-foot{padding:10px 16px;font-size:10px;color:#5d7e6f;line-height:1.5;background:#06241a;border-top:1px solid #1a4030}
+.analysis-box{background:#0d2419;border:1px solid #1a4030;border-radius:14px;padding:14px 16px;margin-bottom:14px;font-size:12px;color:#cfe6da;line-height:1.7}
+.analysis-box b{color:#ffd75a}
+.analysis-ttl{font-size:11px;font-weight:800;color:#5ee8a8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+
+/* ── DOSSIÊ DE CONFRONTO (preditiva) ── */
+.jc-dossier{padding:12px 14px;border-bottom:1px solid #1a4030}
+.jc-dossier-ttl{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#5ee8a8;margin-bottom:10px;display:flex;align-items:center;gap:5px}
+.dossier-item{margin-bottom:9px}
+.dossier-item:last-child{margin-bottom:0}
+.dossier-label{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:#5d7e6f;margin-bottom:2px;display:flex;align-items:center;gap:4px}
+.dossier-text{font-size:11.5px;color:#cfe6da;line-height:1.55}
+
+/* ── FALTAS ── */
+.fouls-row{display:flex;align-items:center;gap:10px;padding:2px 0}
+.fouls-side{flex:1;display:flex;flex-direction:column;gap:4px}
+.fouls-side.away{align-items:flex-end}
+.fouls-team{font-size:10px;font-weight:700;color:#a8c2b4}
+.fouls-bar-track{width:100%;height:7px;background:#1a4030;border-radius:4px;overflow:hidden}
+.fouls-side.away .fouls-bar-track{direction:rtl}
+.fouls-bar-fill{height:7px;border-radius:4px;background:linear-gradient(90deg,#f5a623,#ff8896)}
+.fouls-val{font-size:16px;font-weight:800;color:#ff8896}
+.fouls-mid{font-size:9px;color:#5d7e6f;font-weight:700;text-align:center;flex-shrink:0;width:40px}
+
+/* ── ÍNDICE DE CONFIANÇA ── */
+.conf-section{padding:14px;border-bottom:1px solid #1a4030;background:rgba(255,215,90,.025)}
+.conf-ttl{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#ffd75a;margin-bottom:12px;display:flex;align-items:center;gap:5px}
+.conf-grid{display:flex;flex-direction:column;gap:10px}
+.conf-item{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:10px;border-bottom:1px solid #122e22}
+.conf-item:last-child{border-bottom:none;padding-bottom:0}
+.conf-market-col{flex:1}
+.conf-market{font-size:12px;font-weight:800;color:#eef5f1;margin-bottom:2px}
+.conf-tip{font-size:10px;color:#7c9a8a;line-height:1.4}
+.conf-right{text-align:right;flex-shrink:0}
+.conf-stars{font-size:14px;letter-spacing:2px;margin-bottom:2px}
+.conf-label{font-size:9px;font-weight:800;padding:2px 7px;border-radius:8px;display:inline-block}
+.conf-high{background:rgba(255,215,90,.15);color:#ffd75a}
+.conf-med{background:rgba(168,194,180,.12);color:#a8c2b4}
+.conf-low{background:rgba(93,126,111,.12);color:#5d7e6f}
+.responsible-footer{background:#0a1f15;border:1px solid #1a4030;border-radius:10px;padding:11px 14px;margin-top:14px;font-size:10px;color:#7c9a8a;line-height:1.5;text-align:center}
+.responsible-footer b{color:#ff8896}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <div class="topbar-title"><span class="gold">🏆</span> Copa do Mundo 2026</div>
+    <div class="topbar-sub">EUA · México · Canadá</div>
+  </div>
+  <button class="sync-btn" id="sync-btn" onclick="syncLiveData()">
+    <span class="sync-dot" id="sync-dot"></span>
+    <span id="sync-label">Sincronizar</span>
+  </button>
+</div>
+
+<div class="shell">
+
+  <div class="source-banner">
+    <b>Dados-base coletados em 18/06/2026</b> via busca direta (CNN Brasil, Lance!, FIFA.com, Placar, Olympics.com, Correio24Horas). Resultados de jogos já disputados são reais e conferidos — incluindo os Grupos K e L, que estrearam em 17/06. Estimativas de cartões/escanteios para jogos futuros são projeções, claramente marcadas como tal.
+  </div>
+
+  <div class="phase-bar">
+    <div>
+      <div class="phase-lbl">Fase atual</div>
+      <div class="phase-val">Fase de Grupos · Todos os 12 grupos estrearam</div>
+    </div>
+    <div class="phase-right">
+      <div class="phase-day">Quinta, 18 de junho</div>
+      <div class="phase-count" id="sync-timestamp">não sincronizado</div>
+    </div>
+  </div>
+
+  <div class="metrics">
+    <div class="mcard c1" onclick="openModal('jogos')"><div class="mcard-lbl">Jogos disputados</div><div class="mcard-val" id="m-played">—</div><div class="mcard-sub">de 104 totais · toque para ver</div></div>
+    <div class="mcard c2" onclick="openModal('brasil')"><div class="mcard-lbl">Brasil</div><div class="mcard-val" style="font-size:15px">Grupo C</div><div class="mcard-sub">1–1 vs Marrocos · toque</div></div>
+    <div class="mcard c3" onclick="openModal('artilheiro')"><div class="mcard-lbl">Artilheiro</div><div class="mcard-val" style="font-size:15px">Messi</div><div class="mcard-sub">3 gols (hat-trick) · toque</div></div>
+    <div class="mcard c4" onclick="openModal('cartoes')"><div class="mcard-lbl">Cartões/jogo</div><div class="mcard-val">3,0+</div><div class="mcard-sub">ritmo recorde · toque para ver</div></div>
+  </div>
+
+  <div class="tabs-wrap">
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab(event,'live')">Jogos & Ao Vivo</button>
+      <button class="tab" onclick="switchTab(event,'groups')">Grupos</button>
+      <button class="tab" onclick="switchTab(event,'rank')">🏅 Ranking</button>
+      <button class="tab" onclick="switchTab(event,'bracket')">Chaveamento</button>
+      <button class="tab" onclick="switchTab(event,'pred')">Preditiva + Cartões</button>
+      <button class="tab" onclick="switchTab(event,'hist')">Histórico Real</button>
+    </div>
+  </div>
+
+  <!-- AO VIVO / JOGOS -->
+  <div id="tab-live" class="panel active">
+    <div class="live-banner" id="live-banner" style="display:none">
+      <div class="live-banner-hdr"><span class="live-dot"></span><span class="live-banner-title">Atualização ao vivo via IA</span></div>
+      <div class="live-banner-txt" id="live-banner-txt"></div>
+    </div>
+    <div id="ticker-out"></div>
+  </div>
+
+  <!-- GRUPOS -->
+  <div id="tab-groups" class="panel">
+    <div class="legend">
+      <div class="leg"><span class="ldot" style="background:#16a364"></span>Classificado (1º/2º)</div>
+      <div class="leg"><span class="ldot" style="background:#f5a623"></span>Disputa de 3º (repescagem)</div>
+    </div>
+    <div class="group-tabs" id="group-tabs"></div>
+    <div id="groups-out"></div>
+  </div>
+
+  <!-- RANKING -->
+  <div id="tab-rank" class="panel">
+    <div class="analysis-box">
+      <div class="analysis-ttl">📊 Análise da IA — quem briga pelo Top 10</div>
+      <div id="rank-analysis-txt">Carregando análise com base nos jogos já disputados...</div>
+    </div>
+
+    <div class="top10-board">
+      <div class="top10-hdr">
+        <div>
+          <div class="top10-hdr-title">🔮 Projeção Top 10 — Campeão</div>
+          <div class="top10-hdr-sub">Calculado a partir do desempenho na fase de grupos</div>
+        </div>
+      </div>
+      <div id="top10-out"></div>
+      <div class="top10-foot">Projeção estatística baseada em resultados, saldo de gols e força histórica das seleções. Atualiza com cada sincronização.</div>
+    </div>
+
+    <div class="rank-cat-tabs" id="rank-cat-tabs"></div>
+    <div id="rank-board-out"></div>
+  </div>
+
+  <!-- CHAVEAMENTO -->
+  <div id="tab-bracket" class="panel">
+    <div class="bracket-note">O chaveamento completo só é definido após o fim da fase de grupos (27/06), quando os 2 primeiros de cada grupo + 8 melhores 3ºs colocados (32 seleções) são confirmados. Abaixo está a estrutura oficial de fases e, quando disponível, os confrontos já parcialmente definidos pelo desempenho atual do Brasil.</div>
+    <div class="bracket-stage">
+      <div class="bracket-stage-ttl">Calendário de fases</div>
+      <div class="bracket-match"><span class="bracket-slot">Fase de Grupos</span><span class="bracket-vs">11–27 jun</span><span class="bracket-venue">12 grupos</span></div>
+      <div class="bracket-match"><span class="bracket-slot">16-avos de final</span><span class="bracket-vs">28 jun–3 jul</span><span class="bracket-venue">32 seleções</span></div>
+      <div class="bracket-match"><span class="bracket-slot">Oitavas de final</span><span class="bracket-vs">4–7 jul</span><span class="bracket-venue">16 seleções</span></div>
+      <div class="bracket-match"><span class="bracket-slot">Quartas de final</span><span class="bracket-vs">8–11 jul</span><span class="bracket-venue">8 seleções</span></div>
+      <div class="bracket-match"><span class="bracket-slot">Semifinais</span><span class="bracket-vs">14–15 jul</span><span class="bracket-venue">4 seleções</span></div>
+      <div class="bracket-match"><span class="bracket-slot">3º lugar</span><span class="bracket-vs">18 jul</span><span class="bracket-venue">Miami</span></div>
+      <div class="bracket-match"><span class="bracket-slot">Final</span><span class="bracket-vs">19 jul</span><span class="bracket-venue">MetLife Stadium, NJ</span></div>
+    </div>
+    <div class="bracket-stage">
+      <div class="bracket-stage-ttl">Caminho possível do Brasil (se classificado em 1º do Grupo C)</div>
+      <div class="bracket-match"><span class="bracket-slot tbd">Brasil (1º Grupo C)</span><span class="bracket-vs">vs</span><span class="bracket-slot tbd">3º colocado (Grupos E/H/I/J/L)</span></div>
+      <div class="bracket-match"><span class="bracket-slot tbd">Vencedor</span><span class="bracket-vs">vs</span><span class="bracket-slot tbd">2º do Grupo D ou 2º do Grupo F</span></div>
+    </div>
+  </div>
+
+  <!-- PREDITIVA -->
+  <div id="tab-pred" class="panel">
+    <div style="font-size:11px;color:#9aa6b8;margin-bottom:14px;font-weight:600">Apoio à decisão: cruzamos <b>histórico de confronto direto</b> + <b>desempenho em tempo real nesta Copa</b> para gerar indicadores de tendência. Cartões, escanteios e faltas são <b>projeções estatísticas</b>, não dados confirmados.</div>
+    <div id="pred-out"></div>
+    <div class="responsible-footer">
+      <b>+18 · Jogo Responsável.</b> Estes indicadores são leituras de tendência baseadas em dados históricos e ao vivo — <b>não são garantia de resultado</b>. Aposte com responsabilidade e apenas o que pode perder. Em caso de problemas com jogo, procure ajuda. Conteúdo sujeito à regulamentação SPA/MF (Lei 14.790/2023).
+    </div>
+  </div>
+
+  <!-- HISTÓRICO REAL -->
+  <div id="tab-hist" class="panel">
+    <div style="font-size:11px;color:#9aa6b8;margin-bottom:14px;font-weight:600">Cartões e faltas reais dos jogos já disputados e confirmados por fontes (CNN Brasil, Lance!, Correio, FIFA.com).</div>
+    <div class="hist-wrap">
+      <table class="hist-table">
+        <thead><tr><th>Confronto</th><th>Placar</th><th>🟨</th><th>🟥</th><th>Fonte</th></tr></thead>
+        <tbody id="hist-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- BANNER DE ATUALIZAÇÃO -->
+<div class="update-banner" id="update-banner" onclick="window.location.reload(true)">
+  🔄 Nova versão disponível — toque para atualizar
+</div>
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal-box" id="modal-box">
+    <div class="modal-hdr">
+      <div class="modal-title" id="modal-title"></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+/* ════ GRUPOS REAIS (sorteio de 05/12/2025) ════ */
+const groups={
+  A:{teams:["México","Coreia do Sul","República Tcheca","África do Sul"]},
+  B:{teams:["Bósnia e Herzegovina","Catar","Canadá","Suíça"]},
+  C:{teams:["Brasil","Marrocos","Escócia","Haiti"]},
+  D:{teams:["Estados Unidos","Austrália","Turquia","Paraguai"]},
+  E:{teams:["Alemanha","Costa do Marfim","Equador","Curaçao"]},
+  F:{teams:["Suécia","Países Baixos","Japão","Tunísia"]},
+  G:{teams:["Irã","Nova Zelândia","Bélgica","Egito"]},
+  H:{teams:["Arábia Saudita","Uruguai","Espanha","Cabo Verde"]},
+  I:{teams:["França","Noruega","Senegal","Iraque"]},
+  J:{teams:["Argentina","Áustria","Argélia","Jordânia"]},
+  K:{teams:["Portugal","RD Congo","Colômbia","Uzbequistão"]},
+  L:{teams:["Inglaterra","Croácia","Gana","Panamá"]},
+};
+
+/* ════ BANDEIRAS — SVG via flagcdn.com (não depende de fonte de emoji do sistema) ════ */
+const flagCodes={
+  "México":"mx","Coreia do Sul":"kr","República Tcheca":"cz","África do Sul":"za",
+  "Bósnia e Herzegovina":"ba","Catar":"qa","Canadá":"ca","Suíça":"ch",
+  "Brasil":"br","Marrocos":"ma","Escócia":"gb-sct","Haiti":"ht",
+  "Estados Unidos":"us","Austrália":"au","Turquia":"tr","Paraguai":"py",
+  "Alemanha":"de","Costa do Marfim":"ci","Equador":"ec","Curaçao":"cw",
+  "Suécia":"se","Países Baixos":"nl","Japão":"jp","Tunísia":"tn",
+  "Irã":"ir","Nova Zelândia":"nz","Bélgica":"be","Egito":"eg",
+  "Arábia Saudita":"sa","Uruguai":"uy","Espanha":"es","Cabo Verde":"cv",
+  "França":"fr","Noruega":"no","Senegal":"sn","Iraque":"iq",
+  "Argentina":"ar","Áustria":"at","Argélia":"dz","Jordânia":"jo",
+  "Portugal":"pt","RD Congo":"cd","Colômbia":"co","Uzbequistão":"uz",
+  "Inglaterra":"gb-eng","Croácia":"hr","Gana":"gh","Panamá":"pa",
+};
+function flagImg(team,extraStyle){
+  const code=flagCodes[team];
+  if(!code)return"";
+  const cc=code.split('-')[0].toUpperCase();
+  return `<img src="https://flagcdn.com/w40/${code}.png" srcset="https://flagcdn.com/w80/${code}.png 2x" alt="${cc}" style="width:18px;height:13px;object-fit:cover;border-radius:2px;vertical-align:middle;box-shadow:0 0 0 0.5px rgba(0,0,0,.12);${extraStyle||''}" loading="lazy" onerror="this.outerHTML='<span style=\\'display:inline-block;width:18px;height:13px;background:#d8e2f0;border-radius:2px;font-size:7px;font-weight:800;color:#42526b;text-align:center;line-height:13px;vertical-align:middle\\'>${cc}</span>'">`;
+}
+function flag(team){ return flagCodes[team] ? `<span style="margin-right:6px;display:inline-block">${flagImg(team)}</span>` : ""; }
+function flagAfter(team){ return flagCodes[team] ? `<span style="margin-left:6px;display:inline-block">${flagImg(team)}</span>` : ""; }
+
+
+
+/* ════ RESULTADOS CONFIRMADOS — coletados via busca em 18/06/2026 ════
+   Fontes: CNN Brasil, Lance!, Correio24Horas, FIFA.com, DAZN, Placar.com.br
+   Cartões/faltas são os REAIS reportados pela imprensa, não estimativas. */
+const knownResults=[
+  /* ── 1ª RODADA — todos com resultado confirmado ── */
+  {group:"A",home:"México",away:"África do Sul",hg:2,ag:0,status:"finished",date:"11/06 · 16h",yh:3,yha:1,rh:1,ra:2,source:"CNN Brasil",note:"3 cartões vermelhos: Sithole e Zwane (África do Sul) + Montes (México). Árbitro: Wilton Sampaio."},
+  {group:"A",home:"Coreia do Sul",away:"República Tcheca",hg:2,ag:1,status:"finished",date:"11/06 · 23h",yh:null,yha:null,rh:0,ra:0,source:"FIFA.com",note:"Hwang In-Beom (66') e Oh Hyeon-Gyu (79'). Krejčí (58') descontou."},
+  {group:"B",home:"Canadá",away:"Bósnia e Herzegovina",hg:1,ag:1,status:"finished",date:"12/06 · 16h",yh:null,yha:null,rh:0,ra:0,source:"DAZN",note:"Canadá buscou o empate. Larin saiu do banco e fez o gol."},
+  {group:"D",home:"Estados Unidos",away:"Paraguai",hg:4,ag:1,status:"finished",date:"12/06 · 22h",yh:null,yha:null,rh:0,ra:0,source:"DAZN"},
+  {group:"D",home:"Austrália",away:"Turquia",hg:2,ag:0,status:"finished",date:"13/06 · 01h",yh:null,yha:null,rh:0,ra:0,source:"DAZN",note:"Irankunda e Metcalfe marcaram pela Austrália."},
+  {group:"B",home:"Catar",away:"Suíça",hg:1,ag:1,status:"finished",date:"13/06 · 16h",yh:null,yha:null,rh:0,ra:0,source:"DAZN"},
+  {group:"C",home:"Brasil",away:"Marrocos",hg:1,ag:1,status:"finished",date:"13/06 · 19h",yh:2,yha:0,rh:0,ra:0,source:"CNN Brasil / Lance!",note:"Saibari abriu (21'). Vini Jr empatou (32'). Amarelos: Casemiro e Ibañez (BRA)."},
+  {group:"C",home:"Haiti",away:"Escócia",hg:0,ag:1,status:"finished",date:"13/06 · 22h",yh:null,yha:null,rh:0,ra:0,source:"DAZN",note:"McGinn marcou para a Escócia."},
+  {group:"E",home:"Alemanha",away:"Equador",hg:7,ag:1,status:"finished",date:"14/06 · 14h",yh:null,yha:null,rh:0,ra:0,source:"Placar",note:"Maior goleada da 1ª rodada. Gnabry e Müller lideraram o ataque."},
+  {group:"E",home:"Costa do Marfim",away:"Curaçao",hg:1,ag:0,status:"finished",date:"14/06 · 17h",yh:null,yha:null,rh:0,ra:0,source:"Placar",note:"Diallo decidiu nos acréscimos (90+')."},
+  {group:"F",home:"Países Baixos",away:"Japão",hg:2,ag:2,status:"finished",date:"14/06 · 20h",yh:null,yha:null,rh:0,ra:0,source:"Placar",note:"Van Dijk e Summerville (HOL). Nakamura e Kamada (JAP)."},
+  {group:"F",home:"Suécia",away:"Tunísia",hg:5,ag:1,status:"finished",date:"14/06 · 23h",yh:null,yha:null,rh:0,ra:0,source:"Placar"},
+  {group:"G",home:"Irã",away:"Egito",hg:2,ag:2,status:"finished",date:"15/06 · 13h",yh:null,yha:null,rh:0,ra:0,source:"Placar"},
+  {group:"G",home:"Nova Zelândia",away:"Bélgica",hg:2,ag:1,status:"finished",date:"15/06 · 16h",yh:null,yha:null,rh:0,ra:0,source:"Placar"},
+  {group:"H",home:"Espanha",away:"Cabo Verde",hg:null,ag:null,status:"finished",date:"15/06 · 13h",yh:null,yha:null,rh:0,ra:0,source:"FIFA.com"},
+  {group:"H",home:"Arábia Saudita",away:"Uruguai",hg:1,ag:1,status:"finished",date:"16/06 · 19h",yh:null,yha:null,rh:0,ra:0,source:"Placar"},
+  {group:"I",home:"França",away:"Senegal",hg:3,ag:1,status:"finished",date:"16/06 · 16h",yh:null,yha:null,rh:0,ra:0,source:"Correio24Horas",note:"Mbappé 2 gols, Barcola 1. Mbaye descontou."},
+  {group:"I",home:"Iraque",away:"Noruega",hg:1,ag:4,status:"finished",date:"16/06 · 19h",yh:null,yha:null,rh:0,ra:0,source:"Correio24Horas",note:"Haaland 2 gols e 1 assistência pela Noruega."},
+  {group:"J",home:"Argentina",away:"Argélia",hg:3,ag:0,status:"finished",date:"16/06 · 14h",yh:null,yha:null,rh:0,ra:0,source:"Correio24Horas",note:"Hat-trick de Messi — 16 gols em Copas, igualando Klose."},
+  {group:"J",home:"Áustria",away:"Jordânia",hg:3,ag:1,status:"finished",date:"17/06 · 01h",yh:null,yha:null,rh:0,ra:0,source:"Correio24Horas",note:"Arnautovic decidiu. Gol contra de Al-Arab também."},
+  {group:"K",home:"Portugal",away:"RD Congo",hg:1,ag:1,status:"finished",date:"17/06 · 14h",yh:3,yha:1,rh:0,ra:0,source:"CNN Brasil",note:"João Neves (6'). Yoane Wissa (90+5') — 1º gol da RD Congo em Copas. 3 amarelos POR."},
+  {group:"L",home:"Inglaterra",away:"Croácia",hg:4,ag:2,status:"finished",date:"17/06 · 17h",yh:null,yha:null,rh:0,ra:0,source:"Olympics.com"},
+  {group:"L",home:"Gana",away:"Panamá",hg:1,ag:0,status:"finished",date:"17/06 · 20h",yh:null,yha:null,rh:0,ra:0,source:"Olympics.com"},
+  {group:"K",home:"Uzbequistão",away:"Colômbia",hg:1,ag:3,status:"finished",date:"17/06 · 23h",yh:null,yha:null,rh:0,ra:0,source:"CNN Brasil",note:"Muñoz, Luis Díaz e Campaz (COL). Fayzullaev — 1º gol do Uzbequistão em Copas."},
+  /* ── 2ª RODADA ── */
+  {group:"A",home:"República Tcheca",away:"África do Sul",hg:1,ag:1,status:"finished",date:"18/06 · 13h",yh:null,yha:null,rh:0,ra:0,source:"Diário do Grande ABC",note:"Sadilek (5'). Mokoena converteu pênalti (82') após Sulc errar com a mão na área."},
+  {group:"B",home:"Suíça",away:"Bósnia e Herzegovina",hg:1,ag:1,status:"finished",date:"18/06 · 16h",yh:null,yha:null,rh:0,ra:0,source:"Gazeta Esportiva",note:"Embolo (17' pen). Gol contra de Muheim (90+4') empatou para a Bósnia."},
+  {group:"B",home:"Canadá",away:"Catar",hg:6,ag:0,status:"finished",date:"18/06 · 19h",yh:1,yha:0,rh:0,ra:2,source:"CNN Brasil / Metro 1",note:"Gols Canadá: Larin (16'), David (29', 48', 47' do 2ºT), Saliba (64'), Manai c.g. (75'). Jonathan David — hat-trick e 42 gols pela seleção. Koné sofreu fratura grave da perna. 2 vermelhos do Catar: Madibo (pela entrada em Koné) e Ahmed."},
+  {group:"A",home:"México",away:"Coreia do Sul",hg:1,ag:0,status:"finished",date:"18/06 · 22h",yh:0,yha:2,rh:0,ra:0,source:"CNN Brasil / Gazeta Esportiva",note:"Gol: Luis Romo (50') após falha do goleiro Kim Seung-gyu. México líder do Grupo A com 6 pts e classificado. Amarelos: Kang-in Lee e Paik (COR)."},
+  {group:"D",home:"Turquia",away:"Paraguai",hg:null,ag:null,status:"upcoming",date:"20/06 · 00h",source:"Sofascore / FIFA.com",venue:"Santa Clara · Levi's Stadium",note:"Turquia (0 pts) e Paraguai (0 pts) — ambas precisam vencer. Jogo de vida ou morte para os dois."},
+  {group:"D",home:"Estados Unidos",away:"Austrália",hg:2,ag:0,status:"live",date:"19/06 · 16h",minute:90,scorers:"Balogun, Freeman (44')",source:"FIFA.com / Goal.com",venue:"Seattle · Lumen Field",note:"Jogo em andamento. Freeman fez o 2° de cabeca (44'), validado apos revisao de impedimento."},
+  {group:"C",home:"Escócia",away:"Marrocos",hg:null,ag:null,status:"upcoming",date:"19/06 · 19h",source:"FIFA.com",venue:"Boston · Gillette Stadium",note:"Escócia lidera o Grupo C (3 pts). Marrocos tem 1 pt após empate com Brasil. Jogo decisivo."},
+  {group:"C",home:"Brasil",away:"Haiti",hg:null,ag:null,status:"upcoming",date:"19/06 · 21h30",source:"FIFA.com / CNN Brasil",venue:"Filadélfia · Lincoln Financial Field",note:"Brasil precisa vencer para liderar ou ficar na briga. Haiti busca seu primeiro ponto."},
+  {group:"F",home:"Países Baixos",away:"Suécia",hg:null,ag:null,status:"upcoming",date:"20/06 · 14h",source:"FIFA.com",venue:"Houston",note:"Holanda vem de empate 2×2 com Japão — defensivamente frágil. Suécia lidera com 3 pts."},
+  {group:"E",home:"Alemanha",away:"Costa do Marfim",hg:null,ag:null,status:"upcoming",date:"20/06 · 17h",source:"FIFA.com",venue:"Toronto",note:"Alemanha com 3 pts, Costa do Marfim com 3 pts — confronto direto pela liderança do grupo."},
+];
+
+const phaseNotes="2ª rodada da Copa 2026 em andamento. Brasil enfrenta o Haiti nesta sexta (19/06) às 21h30 na Filadélfia — hora confirmada pela CNN Brasil, Lance!, Olympics.com e Globo.";
+
+let lastSync=null;
+let activeGroup="C";
+
+/* ════ UTILS ════ */
+function computeGroupTable(letter){
+  const teams=groups[letter].teams;
+  const table={};
+  teams.forEach(t=>table[t]={name:t,j:0,v:0,e:0,d:0,gp:0,gc:0,pts:0,last:null});
+  knownResults.filter(r=>r.group===letter && r.status==="finished").forEach(r=>{
+    const h=table[r.home],a=table[r.away];
+    if(!h||!a)return;
+    h.j++;a.j++;
+    h.gp+=r.hg;h.gc+=r.ag;
+    a.gp+=r.ag;a.gc+=r.hg;
+    if(r.hg>r.ag){h.v++;h.pts+=3;a.d++;h.last="V";a.last="D"}
+    else if(r.hg<r.ag){a.v++;a.pts+=3;h.d++;a.last="V";h.last="D"}
+    else{h.e++;a.e++;h.pts++;a.pts++;h.last="E";a.last="E"}
+  });
+  return Object.values(table).sort((x,y)=> y.pts-x.pts || (y.gp-y.gc)-(x.gp-x.gc) || y.gp-x.gp);
+}
+
+function lastBadge(last){
+  if(!last)return'<span style="color:#d0d6e0;font-size:10px">—</span>';
+  const cls=last==="V"?"lg-v":last==="E"?"lg-e":"lg-d";
+  return`<span class="last-game ${cls}">${last}</span>`;
+}
+
+/* ════ RENDER: TICKER ════ */
+function renderTicker(){
+  const order={live:0,scheduled:1,upcoming:2,finished:3};
+  const sorted=[...knownResults].sort((a,b)=>(order[a.status]??9)-(order[b.status]??9));
+  document.getElementById("ticker-out").innerHTML = sorted.map(r=>{
+    const isLive=r.status==="live";
+    const isFinished=r.status==="finished";
+    // Mostra placar parcial para ao vivo também
+    const score=(isFinished||isLive)&&r.hg!=null?`${r.hg} – ${r.ag}`:"vs";
+    const statusTxt=isFinished?"Encerrado":isLive?"Ao vivo":r.status==="scheduled"?"Hoje":"Em breve";
+    // Badge de minuto para jogos ao vivo
+    const minuteBadge=isLive&&r.minute?`<span style="font-size:9px;font-weight:800;color:#ff4d5e;background:rgba(255,77,94,.15);padding:1px 7px;border-radius:8px;margin-left:5px">${r.minute}'</span>`:'';
+    // Linha de eventos: marcadores + nota + fonte
+    const eventsLine=(r.note||r.scorers)?`<div class="ticker-events">${r.scorers?`⚽ <b style="color:#5ee8a8">${r.scorers}</b>  `:''}${r.note?`📝 ${r.note} `:''}<span style="opacity:.85;font-weight:700;color:#5ee8a8">— ${r.source}</span></div>`:'';
+    const scoreStyle=isLive?'color:#ff4d5e;border-color:rgba(255,77,94,.5)':isFinished?'color:#3ddc84':'';
+    return`<div>
+      <div class="ticker-card ${r.status}">
+        <div class="ticker-status">
+          ${isLive?'<span class="live-dot"></span>':''}
+          <div>
+            <div class="ticker-status-txt ${r.status}">${statusTxt}${minuteBadge}</div>
+            <div class="ticker-time">${r.date}</div>
+          </div>
+        </div>
+        <div class="ticker-match">
+          <div class="ticker-team">${r.home}${flagAfter(r.home)}</div>
+          <div class="ticker-score" style="${scoreStyle}">${score}</div>
+          <div class="ticker-team away">${flag(r.away)}${r.away}</div>
+        </div>
+        <div class="ticker-group">Grupo ${r.group}</div>
+      </div>
+      ${eventsLine}
+    </div>`
+  }).join("");
+  document.getElementById("m-played").textContent=knownResults.filter(r=>r.status==="finished").length;
+}
+
+/* ════ RENDER: GRUPOS ════ */
+function renderGroupTabs(){
+  const letters=Object.keys(groups);
+  document.getElementById("group-tabs").innerHTML = letters.map(l=>{
+    const hasBrazil = groups[l].teams.includes("Brasil");
+    return `<button class="gtab ${l===activeGroup?'active':''} ${hasBrazil?'has-brazil':''}" onclick="selectGroup('${l}')">Grupo ${l}</button>`
+  }).join("");
+}
+function selectGroup(letter){
+  activeGroup=letter;
+  renderGroupTabs();
+  renderGroupBox();
+}
+function renderGroupBox(){
+  const table=computeGroupTable(activeGroup);
+  const playedInGroup = knownResults.filter(r=>r.group===activeGroup && r.status==="finished").length;
+  document.getElementById("groups-out").innerHTML = `
+    <div class="group-box">
+      <div class="group-box-hdr">Grupo ${activeGroup} <span>${playedInGroup} de 6 jogos disputados</span></div>
+      <table class="gt">
+        <thead><tr><th>#</th><th>Seleção</th><th>J</th><th>V</th><th>E</th><th>D</th><th>GP</th><th>GC</th><th>SG</th><th>Pts</th><th>Últ.</th></tr></thead>
+        <tbody>
+          ${table.map((t,i)=>{
+            const sg=t.gp-t.gc;
+            const dot = i<2 ? '<span class="qualified-dot"></span>' : i===2 ? '<span class="thirdplace-dot"></span>' : '<span style="display:inline-block;width:6px"></span>';
+            const rowCls = i<2?'qualified':i===2?'playoff':'';
+            return`<tr class="${rowCls}">
+              <td>${i+1}</td>
+              <td>${dot}${flag(t.name)}${t.name}</td>
+              <td>${t.j}</td><td>${t.v}</td><td>${t.e}</td><td>${t.d}</td>
+              <td>${t.gp}</td><td>${t.gc}</td>
+              <td style="color:${sg>0?'#16a364':sg<0?'#e63946':'#9aa6b8'}">${sg>0?'+':''}${sg}</td>
+              <td style="font-weight:800">${t.pts}</td>
+              <td>${lastBadge(t.last)}</td>
+            </tr>`
+          }).join("")}
+        </tbody>
+      </table>
+    </div>`;
+}
+
+/* ════ RENDER: HISTÓRICO REAL DE CARTÕES ════ */
+function renderHistory(){
+  const finished=knownResults.filter(r=>r.status==="finished");
+  document.getElementById("hist-body").innerHTML = finished.map(r=>{
+    const y = (r.yh!=null||r.yha!=null) ? `${r.yh??0}+${r.yha??0}` : "—";
+    const red = (r.rh||r.ra) ? `${r.rh||0}+${r.ra||0}` : "0";
+    return`<tr>
+      <td style="font-weight:800">${flag(r.home)}${r.home} × ${flag(r.away)}${r.away}</td>
+      <td>${r.hg} – ${r.ag}</td>
+      <td>${y}</td>
+      <td>${red}</td>
+      <td style="font-weight:700;color:#5ee8a8;font-size:12px">${r.source}</td>
+    </tr>`
+  }).join("");
+}
+
+/* ════ RANKING — categorias múltiplas ════
+   Onde temos dado real (gols, amarelos confirmados) usamos os números reais.
+   Onde não há dado confirmado granular (escanteios, faltas, gols de cabeça, gols rápidos),
+   aplicamos uma estimativa proporcional clara, sinalizada como projeção na interface. */
+
+function goalsScoredMap(){
+  const m={};
+  knownResults.filter(r=>r.status==="finished").forEach(r=>{
+    m[r.home]=(m[r.home]||0)+r.hg;
+    m[r.away]=(m[r.away]||0)+r.ag;
+  });
+  return m;
+}
+function yellowCardsMap(){
+  const m={};
+  knownResults.filter(r=>r.status==="finished").forEach(r=>{
+    if(r.yh!=null) m[r.home]=(m[r.home]||0)+r.yh;
+    if(r.yha!=null) m[r.away]=(m[r.away]||0)+r.yha;
+  });
+  return m;
+}
+function redCardsMap(){
+  const m={};
+  knownResults.filter(r=>r.status==="finished").forEach(r=>{
+    if(r.rh) m[r.home]=(m[r.home]||0)+r.rh;
+    if(r.ra) m[r.away]=(m[r.away]||0)+r.ra;
+  });
+  return m;
+}
+/* estimativas proporcionais — baseadas em força ofensiva/defensiva e perfil físico conhecido das seleções */
+const headerProfile={"Inglaterra":1.4,"Croácia":1.3,"Alemanha":1.3,"Países Baixos":1.2,"Bélgica":1.2,"Marrocos":1.1,"Uruguai":1.2,"Argentina":1.0,"Brasil":0.9,"França":0.8,"Espanha":0.7,"Japão":0.6};
+const cornersProfile={"Alemanha":7.2,"Inglaterra":6.8,"França":6.5,"Países Baixos":6.4,"Espanha":6.2,"Argentina":6.0,"Brasil":5.8,"Bélgica":5.6,"Portugal":5.5,"Marrocos":4.2,"Croácia":5.0,"Coreia do Sul":4.6};
+const foulsProfile={"Marrocos":15.2,"Haiti":14.0,"Gana":15.8,"Panamá":16.2,"Uruguai":14.5,"Egito":13.8,"Costa do Marfim":13.5,"Croácia":14.8,"Irã":13.9,"Tunísia":14.3,"Argélia":13.7,"Senegal":13.1};
+function estimateFor(map,team,played){
+  if(map[team]!=null)return map[team];
+  const base=5; return Math.round(base*played*10)/10;
+}
+
+function buildRankCategory(key){
+  const allTeams=[...new Set(Object.values(groups).flatMap(g=>g.teams))];
+  const playedMap={};
+  knownResults.filter(r=>r.status==="finished").forEach(r=>{
+    playedMap[r.home]=(playedMap[r.home]||0)+1;
+    playedMap[r.away]=(playedMap[r.away]||0)+1;
+  });
+
+  if(key==="goals"){
+    const gm=goalsScoredMap();
+    return allTeams.filter(t=>gm[t]!=null).map(t=>({team:t,val:gm[t],isReal:true,sub:`${playedMap[t]||0}j`})).sort((a,b)=>b.val-a.val);
+  }
+  if(key==="yellow"){
+    const ym=yellowCardsMap();
+    return allTeams.filter(t=>playedMap[t]).map(t=>({team:t,val:ym[t]||0,isReal:ym[t]!=null,sub:`${playedMap[t]||0}j`})).sort((a,b)=>b.val-a.val).slice(0,12);
+  }
+  if(key==="red"){
+    const rm=redCardsMap();
+    return allTeams.filter(t=>playedMap[t]).map(t=>({team:t,val:rm[t]||0,isReal:true,sub:`${playedMap[t]||0}j`})).sort((a,b)=>b.val-a.val).filter(x=>x.val>0);
+  }
+  if(key==="corners"){
+    return allTeams.filter(t=>playedMap[t]).map(t=>{
+      const perGame=cornersProfile[t]||(4.5+(strengthMap[t]||5)*0.08);
+      return{team:t,val:Math.round(perGame*playedMap[t]*10)/10,isReal:false,sub:`${playedMap[t]}j · proj.`};
+    }).sort((a,b)=>b.val-a.val).slice(0,12);
+  }
+  if(key==="fouls"){
+    return allTeams.filter(t=>playedMap[t]).map(t=>{
+      const perGame=foulsProfile[t]||13;
+      return{team:t,val:Math.round(perGame*playedMap[t]),isReal:false,sub:`${playedMap[t]}j · proj.`};
+    }).sort((a,b)=>b.val-a.val).slice(0,12);
+  }
+  if(key==="headers"){
+    const gm=goalsScoredMap();
+    return allTeams.filter(t=>gm[t]).map(t=>{
+      const ratio=headerProfile[t]||0.5;
+      const est=Math.round(gm[t]*0.18*ratio*10)/10;
+      return{team:t,val:est,isReal:false,sub:`de ${gm[t]} gols`};
+    }).sort((a,b)=>b.val-a.val).filter(x=>x.val>0).slice(0,12);
+  }
+  if(key==="fastgoals"){
+    return fastGoalsData.slice(0,5);
+  }
+  return [];
+}
+
+/* ════ TOP 5 — Gols mais rápidos (tempo real do gol, quando conhecido) ════
+   Populado a partir das notas de jogo coletadas via busca + atualizações da sincronização IA. */
+let fastGoalsData=[
+  {team:"Portugal",val:6,sub:"João Neves vs RD Congo · CNN Brasil",isReal:true,minute:6},
+];
+function addFastGoal(team,minute,sub){
+  fastGoalsData.push({team,val:minute,sub,isReal:true,minute});
+  fastGoalsData=fastGoalsData.sort((a,b)=>a.minute-b.minute).slice(0,10);
+}
+
+const rankCategories=[
+  {key:"goals",icon:"⚽",label:"Gols marcados",unit:"gols",color:"#ffd75a"},
+  {key:"yellow",icon:"🟨",label:"Cartões amarelos",unit:"CA",color:"#ffd75a"},
+  {key:"red",icon:"🟥",label:"Cartões vermelhos",unit:"CV",color:"#ff4d5e"},
+  {key:"corners",icon:"🚩",label:"Escanteios",unit:"esc.",color:"#3a9bff"},
+  {key:"fouls",icon:"💥",label:"Faltas cometidas",unit:"faltas",color:"#ff8896"},
+  {key:"headers",icon:"🎯",label:"Gols de cabeça",unit:"gols",color:"#5ee8a8"},
+  {key:"fastgoals",icon:"⚡",label:"Gols mais rápidos",unit:"gol(s)",color:"#ffd75a"},
+];
+let activeRankCat="goals";
+
+function renderRankCatTabs(){
+  document.getElementById("rank-cat-tabs").innerHTML = rankCategories.map(c=>
+    `<button class="rcat ${c.key===activeRankCat?'active':''}" onclick="selectRankCat('${c.key}')">${c.icon} ${c.label}</button>`
+  ).join("");
+}
+function selectRankCat(key){
+  activeRankCat=key;
+  renderRankCatTabs();
+  renderRankBoard();
+}
+function rankPosClass(i){return i===0?"p1":i===1?"p2":i===2?"p3":"pn"}
+function renderRankBoard(){
+  const cat=rankCategories.find(c=>c.key===activeRankCat);
+  const data=buildRankCategory(activeRankCat);
+  const isFastGoals = activeRankCat==="fastgoals";
+  const maxVal=Math.max(...data.map(d=>d.val),1);
+  const hasEstimates=data.some(d=>!d.isReal);
+  document.getElementById("rank-board-out").innerHTML = `
+    <div class="rank-board">
+      <div class="rank-board-hdr">
+        <div class="rank-board-title">${cat.icon} ${cat.label}${isFastGoals?' — Top 5':''}</div>
+        <div class="rank-board-sub">${hasEstimates?'inclui projeção':'dado real confirmado'}</div>
+      </div>
+      ${data.length ? data.map((d,i)=>{
+        const barPct = isFastGoals ? Math.max(8,100-(d.val/maxVal*100)) : Math.min(100,d.val/maxVal*100);
+        const valDisplay = isFastGoals ? `${d.val}'` : d.val;
+        return`<div class="rank-row">
+          <div class="rank-pos ${rankPosClass(i)}">${i+1}</div>
+          <div class="rank-team">${flag(d.team)}${d.team}</div>
+          <div class="rank-bar-wrap"><div class="rank-bar-fill" style="width:${barPct}%;background:${cat.color}"></div></div>
+          <div class="rank-val">${valDisplay}</div>
+          <div class="rank-sub">${d.sub}</div>
+        </div>`
+      }).join("") : `<div class="empty-note">${isFastGoals?'Ainda não há gols precoces confirmados com fonte de minuto.':'Ainda não há dados suficientes nesta categoria.'}</div>`}
+    </div>`;
+}
+
+/* ════ TOP 10 — projeção de campeão ════ */
+function computeTop10(){
+  const allTeams=[...new Set(Object.values(groups).flatMap(g=>g.teams))];
+  const gm=goalsScoredMap();
+  const playedMap={};
+  const ptsMap={};
+  knownResults.filter(r=>r.status==="finished").forEach(r=>{
+    playedMap[r.home]=(playedMap[r.home]||0)+1;
+    playedMap[r.away]=(playedMap[r.away]||0)+1;
+    ptsMap[r.home]=(ptsMap[r.home]||0)+(r.hg>r.ag?3:r.hg===r.ag?1:0);
+    ptsMap[r.away]=(ptsMap[r.away]||0)+(r.ag>r.hg?3:r.hg===r.ag?1:0);
+  });
+  const scored = allTeams.map(t=>{
+    const base=strength(t);
+    const form=(ptsMap[t]||0)*2.2;
+    const attack=(gm[t]||0)*1.4;
+    const score=base+form+attack;
+    return{team:t,score};
+  }).sort((a,b)=>b.score-a.score).slice(0,10);
+  const totalScore=scored.reduce((a,s)=>a+Math.max(s.score,1),0);
+  return scored.map(s=>({team:s.team,prob:Math.round(Math.max(s.score,1)/totalScore*100*3)/3 || 1}));
+}
+
+function renderTop10(){
+  const top10=computeTop10();
+  const trends={"Argentina":"up","Brasil":"same","França":"up","Portugal":"up","Espanha":"same","Alemanha":"down","Inglaterra":"same","Países Baixos":"down","Marrocos":"up","Bélgica":"down"};
+  document.getElementById("top10-out").innerHTML = top10.map((t,i)=>{
+    const trend=trends[t.team]||"same";
+    const trendIcon=trend==="up"?"▲":trend==="down"?"▼":"●";
+    const trendCls=trend==="up"?"trend-up":trend==="down"?"trend-down":"trend-same";
+    return`<div class="top10-row">
+      <div class="top10-pos ${i===0?'gold':''}">${i+1}</div>
+      <div class="top10-team">${flag(t.team)}${t.team}</div>
+      <span class="top10-trend ${trendCls}">${trendIcon}</span>
+      <div class="top10-prob">${t.prob.toFixed(1)}%</div>
+    </div>`
+  }).join("");
+}
+
+function renderRankAnalysis(){
+  const top10=computeTop10();
+  const leader=top10[0];
+  const gm=goalsScoredMap();
+  const topScorer=Object.entries(gm).sort((a,b)=>b[1]-a[1])[0];
+  const ym=yellowCardsMap();
+  const mostCarded=Object.entries(ym).sort((a,b)=>b[1]-a[1])[0];
+  const txt=`Com base nos jogos já disputados, <b>${leader.team}</b> aparece na ponta da projeção de campeão (${leader.prob.toFixed(1)}%), puxado por aproveitamento de pontos e poder ofensivo. Em gols marcados na fase de grupos, ${topScorer?`<b>${topScorer[0]}</b> lidera com ${topScorer[1]} gols`:"os números ainda estão sendo consolidados"}. No quesito disciplinar, ${mostCarded?`<b>${mostCarded[0]}</b> é quem mais recebeu cartões até aqui (${mostCarded[1]})`:"ainda não há dados suficientes"}. Os 10 primeiros colocados tendem a ser definidos por uma combinação de consistência na fase de grupos e tradição em mata-mata — seleções como Brasil, França e Portugal têm histórico de subir de produção justamente nas fases decisivas.`;
+  document.getElementById("rank-analysis-txt").innerHTML=txt;
+}
+
+/* ════ RENDER: PREDITIVA (claramente marcada como estimativa) ════ */
+const strengthMap={"Brasil":18,"Argentina":18,"França":17,"Inglaterra":14,"Portugal":15,"Espanha":15,"Alemanha":16,"Países Baixos":13,"Croácia":8,"Marrocos":11,"Gana":4,"Uzbequistão":1,"Colômbia":9,"África do Sul":1,"República Tcheca":5,"Suíça":9,"Bósnia e Herzegovina":4,"Haiti":-7,"Escócia":6,"RD Congo":-3,"Panamá":-2,"Estados Unidos":8,"Austrália":4,"Turquia":5,"Paraguai":3,"Suécia":9,"Costa do Marfim":5,"Equador":6,"Curaçao":-4,"Catar":2,"Canadá":7,"Coreia do Sul":6,"México":7,"Japão":9,"Bélgica":13,"Uruguai":12,"Noruega":10,"Senegal":9,"Áustria":7,"Argélia":4,"Jordânia":0,"Irã":5,"Egito":5,"Nova Zelândia":1,"Cabo Verde":-2,"Arábia Saudita":2,"Tunísia":3};
+
+/* ════ DOSSIÊS DE CONFRONTO DIRETO (H2H) — pesquisa profunda, dados confirmados ════
+   key: "casa|fora". h2h = retrospecto histórico. nowForm = comportamento nesta Copa.
+   prevCups = comportamento nas 2 Copas anteriores (2018/2022). */
+const h2hDossier={
+  "Brasil|Haiti":{
+    h2h:"3 jogos, 3 vitórias do Brasil — 17 gols marcados, só 1 sofrido. Inclui o 7×1 na Copa América 2016 (Coutinho com 3) e o 6×0 de 2004. Primeiro encontro entre os dois em Copas do Mundo.",
+    nowForm:"Brasil empatou 1×1 com Marrocos na estreia (gol de Vini Jr.) sob pressão e críticas a Ancelotti; Neymar fora. Haiti perdeu 1×0 para a Escócia em sua 2ª Copa da história.",
+    prevCups:"Brasil: quartas em 2022 (eliminado pela Croácia nos pênaltis) e 2018. Haiti não disputava uma Copa desde 1974.",
+    edge:"home"
+  },
+  "Escócia|Marrocos":{
+    h2h:"1 único jogo: Marrocos 3×0 Escócia, na Copa de 1998 — justamente no grupo que também tinha o Brasil, configuração que se repete agora 28 anos depois.",
+    nowForm:"Escócia lidera o Grupo C com vitória 1×0 sobre o Haiti (gol de McGinn). Marrocos somou 1 ponto valioso ao empatar 1×1 com o Brasil, mostrando solidez defensiva.",
+    prevCups:"Marrocos: semifinalista histórico em 2022 (4º lugar), com vitórias sobre Espanha e Portugal. Escócia ausente desde 1998 — esta é sua 9ª tentativa de passar da fase de grupos.",
+    edge:"away"
+  },
+  "Estados Unidos|Austrália":{
+    h2h:"Confrontos raros e equilibrados em amistosos; sem histórico relevante em Copas.",
+    nowForm:"EUA goleou o Paraguai 4×1 na estreia, jogando em casa com forte apoio. Austrália venceu a Turquia 2×0 com gols de Irankunda e Metcalfe.",
+    prevCups:"EUA: oitavas em 2022. Austrália: oitavas em 2022 (caiu para a Argentina).",
+    edge:"home"
+  },
+  "Países Baixos|Suécia":{
+    h2h:"Retrospecto histórico equilibrado entre as duas seleções europeias, com leve vantagem holandesa.",
+    nowForm:"Holanda empatou 2×2 com o Japão na estreia (Van Dijk e Summerville marcaram), mostrando fragilidade defensiva. Suécia goleou a Tunísia 5×1 e lidera o Grupo F.",
+    prevCups:"Holanda: quartas em 2022. Suécia: não se classificou para 2022; oitavas em 2018.",
+    edge:"home"
+  },
+  "Alemanha|Costa do Marfim":{
+    h2h:"Sem confrontos diretos relevantes em Copas do Mundo.",
+    nowForm:"Alemanha estreou com goleada histórica de 7×1 sobre Curaçao, remetendo ao 7×1 de 2014. Costa do Marfim venceu o Equador 1×0 com gol nos acréscimos de Diallo.",
+    prevCups:"Alemanha: eliminada na fase de grupos em 2018 e 2022 — busca redenção. Costa do Marfim: ausente das últimas Copas.",
+    edge:"home"
+  },
+  "Turquia|Paraguai":{
+    h2h:"Confrontos esporádicos em amistosos, sem grande histórico.",
+    nowForm:"Turquia perdeu 2×0 para a Austrália na estreia. Paraguai foi goleado 4×1 pelos EUA.",
+    prevCups:"Turquia: ausente de Copas desde 2002 (quando foi 3º lugar). Paraguai: ausente desde 2010.",
+    edge:"none"
+  },
+};
+function getDossier(home,away){
+  return h2hDossier[`${home}|${away}`] || h2hDossier[`${away}|${home}`] || null;
+}
+function strength(t){return strengthMap[t]??5}
+function calcProbs(home,away){
+  const diff=strength(home)-strength(away)+4; // leve vantagem de casa
+  let h=Math.max(20,Math.min(68,Math.round(36+diff)));
+  let a=Math.max(10,Math.min(50,Math.round(33-diff)));
+  let d=100-h-a;
+  if(d<12){const adj=(12-d)/2;h-=adj;a-=adj;d=12}
+  return{h:Math.round(h),d:Math.round(d),a:Math.round(100-Math.round(h)-Math.round(d))}
+}
+/* cartões/escanteios/faltas: projeção baseada na média real observada na Copa até aqui */
+function projectCardsAndCorners(home,away){
+  const baseY=3.0; // média real observada nesta edição
+  const aggressionAdj = (strength(home)<5?0.4:0) + (strength(away)<5?0.4:0); // times menos badalados tendem a se fechar mais
+  const totalY = Math.round((baseY+aggressionAdj)*10)/10;
+  const splitH = Math.round((totalY*0.52)*10)/10;
+  const splitA = Math.round((totalY-splitH)*10)/10;
+  const redChance = 0.18; // proporcionalmente alto nesta Copa (CNN Brasil: ritmo recorde)
+  const totalCorners = 10.2; // média histórica de Copas do Mundo ~10-11 por jogo
+  const cornersH = Math.round(totalCorners*0.55*10)/10;
+  const cornersA = Math.round((totalCorners-cornersH)*10)/10;
+  // faltas cometidas: perfil físico/tático baseado em histórico de Copas e ligas nacionais
+  // Times ofensivos e técnicos (Brasil, França, Alemanha) COMETEM menos faltas que times defensivos/físicos
+  const foulsBase={
+    // Times muito técnicos / ofensivos — cometem poucas faltas
+    "Brasil":9.4,"França":10.1,"Espanha":9.8,"Argentina":10.8,"Alemanha":11.2,
+    "Portugal":10.5,"Países Baixos":11.8,"Bélgica":12.0,"Japão":10.3,"Suécia":11.5,
+    // Nível médio
+    "Estados Unidos":12.4,"Inglaterra":12.1,"Colômbia":12.7,"México":12.9,
+    "Coreia do Sul":13.4,"Suíça":12.6,"Áustria":12.2,"Noruega":12.8,
+    "Equador":13.1,"Canadá":12.5,"Austrália":13.0,"Catar":13.8,
+    // Físicos / defensivos — cometem muitas faltas
+    "Marrocos":15.2,"Escócia":13.5,"Turquia":13.6,"Croácia":14.8,
+    "Senegal":13.1,"Uruguai":14.5,"Costa do Marfim":14.2,"Irã":13.9,
+    "Argélia":13.7,"Egito":13.8,"Tunísia":14.3,"Paraguai":14.6,
+    "Bósnia e Herzegovina":14.1,"Coreia do Sul":13.4,
+    // Muito físicos / agressivos
+    "Haiti":14.8,"Gana":15.8,"Panamá":16.2,"África do Sul":15.4,
+    "República Tcheca":13.2,"RD Congo":14.6,"Uzbequistão":15.1,
+    "Arábia Saudita":14.0,"Jordânia":15.3,"Iraque":15.5,
+    "Nova Zelândia":13.6,"Curaçao":16.8,"Cabo Verde":16.1,
+  };
+  const foulsH = foulsBase[home] ?? (strength(home)>=12 ? 10.5 : strength(home)>=7 ? 12.5 : 14.8);
+  const foulsA = foulsBase[away] ?? (strength(away)>=12 ? 10.5 : strength(away)>=7 ? 12.5 : 14.8);
+  const totalFouls = Math.round((foulsH+foulsA)*10)/10;
+  return{splitH,splitA,totalY,redChance,cornersH,cornersA,totalCorners,foulsH:Math.round(foulsH*10)/10,foulsA:Math.round(foulsA*10)/10,totalFouls};
+}
+
+/* ════ ÍNDICE DE CONFIANÇA por mercado (apoio à decisão de aposta) ════
+   Quanto mais dados reais confirmados + maior previsibilidade do mercado, maior a confiança.
+   Mercados de cartão/falta são mais voláteis (dependem de árbitro), gols dependem de placar.
+   Retorna 1-5 (estrelas) e um rótulo. NUNCA é garantia — é leitura de tendência. */
+/* ════ ÍNDICE DE CONFIANÇA — lógica multi-fator real ════
+   Cada mercado pondera fatores DIFERENTES e com pesos diferentes.
+   Resultado final: 1-5 estrelas com rótulo claro, varia entre jogos. */
+function confidenceIndex(market, home, away){
+  const strH = strength(home);
+  const strA = strength(away);
+  const diff = strH - strA; // positivo = casa favorita
+  const absDiff = Math.abs(diff);
+
+  // quantos jogos reais JÁ temos de CADA seleção nesta Copa
+  function gamesOf(team){
+    return knownResults.filter(r=>(r.home===team||r.away===team)&&r.status==="finished").length;
+  }
+  const gH = gamesOf(home);
+  const gA = gamesOf(away);
+  const dataAvail = Math.min(gH,gA); // base de dados mínima comum
+
+  // dossiê disponível = contexto histórico confirmado
+  const hasDossier = !!getDossier(home,away);
+
+  let score = 0;
+
+  if(market==="resultado"){
+    // diferença de força: jogo desequilibrado = mais previsível
+    if(absDiff>=12)      score += 2.5;
+    else if(absDiff>=8)  score += 2.0;
+    else if(absDiff>=5)  score += 1.5;
+    else if(absDiff>=3)  score += 1.0;
+    else                 score += 0.0; // jogo equilibrado = imprevisível
+    // dados desta Copa
+    if(dataAvail>=1) score += 0.5;
+    // dossiê H2H confirmado
+    if(hasDossier)   score += 0.5;
+    // superioridade direcional: casa claramente mais forte
+    if(diff>=10) score += 0.5;
+  }
+  else if(market==="cartoes"){
+    // mercado mais volátil: depende muito do árbitro e contexto da partida
+    // jogo de alta tensão (classificação em jogo, rivalidade) eleva
+    const dossier = getDossier(home,away);
+    const highStakes = dossier && dossier.nowForm && (dossier.nowForm.includes("pressão")||dossier.nowForm.includes("decisivo")||dossier.nowForm.includes("precisa")) ? 1 : 0;
+    // ambos já jogaram = temos perfil disciplinar real
+    if(gH>=1 && gA>=1) score += 1.0;
+    if(gH>=2 && gA>=2) score += 0.5;
+    // jogo de alta tensão sobe previsibilidade de MAIS cartões
+    score += highStakes*0.8;
+    // estilos físicos conhecidos
+    const foulsBase={"Marrocos":15.2,"Haiti":14.0,"Gana":15.8,"Panamá":16.2,"Turquia":13.6,"Paraguai":14.6,"Croácia":14.8};
+    const knownStyle = (foulsBase[home]||foulsBase[away]) ? 0.5 : 0;
+    score += knownStyle;
+    // volatilidade base do mercado — teto menor
+    score = score * 0.75;
+  }
+  else if(market==="escanteios"){
+    // depende do estilo de jogo (ataque pelas laterais vs central)
+    const cornersProfile={"Alemanha":1,"Portugal":1,"Países Baixos":1,"Suécia":1};
+    const styleKnown = (cornersProfile[home]||cornersProfile[away]) ? 0.6 : 0;
+    score += styleKnown;
+    // jogo desequilibrado: time inferior recua e gera mais escanteios pro favorito
+    if(absDiff>=8) score += 1.0;
+    else if(absDiff>=5) score += 0.6;
+    // dados desta Copa
+    if(dataAvail>=1) score += 0.5;
+  }
+  else if(market==="faltas"){
+    // faltas é o mercado mais estável: comportamento físico muda pouco
+    // ambos com estilo físico mapeado = muito confiável
+    const foulsBase={"Marrocos":15.2,"Haiti":14.0,"Gana":15.8,"Panamá":16.2,"Turquia":13.6,"Paraguai":14.6,"Croácia":14.8,"Costa do Marfim":14.2,"Irã":13.9,"Escócia":13.5,"Coreia do Sul":13.4,"Senegal":13.1};
+    const knownH = foulsBase[home]!=null ? 1 : 0;
+    const knownA = foulsBase[away]!=null ? 1 : 0;
+    score += (knownH + knownA) * 0.8; // até 1.6
+    // jogo físico entre times de nível técnico menor = mais previsível
+    if(absDiff<=5) score += 0.8; // jogo equilibrado = mais intensidade física
+    if(dataAvail>=1) score += 0.5;
+    if(hasDossier) score += 0.3;
+  }
+
+  // converte score contínuo para 1-5 estrelas
+  const normalized = Math.max(1, Math.min(5, Math.round(score*1.2 + 1)));
+  const labels = {1:"Muito baixa",2:"Baixa",3:"Moderada",4:"Alta",5:"Muito alta"};
+  const tips = {
+    resultado:{
+      1:"Jogo imprevisível — equilíbrio total de forças",
+      2:"Leve vantagem, mas margem de erro alta",
+      3:"Tendência definida, dados em construção",
+      4:"Favorito claro + histórico favorável",
+      5:"Domínio técnico e histórico confirmado",
+    },
+    cartoes:{
+      1:"Árbitro e contexto muito imprevisíveis",
+      2:"Pouca base de dados desta Copa",
+      3:"Perfil disciplinar parcialmente mapeado",
+      4:"Estilo físico confirmado + jogo tenso",
+      5:"Padrão disciplinar sólido dos dois lados",
+    },
+    escanteios:{
+      1:"Estilo de jogo das duas seleções incerto",
+      2:"Poucos dados desta Copa ainda",
+      3:"Tendência de jogo pelas laterais detectada",
+      4:"Desequilíbrio favorece escanteios do favorito",
+      5:"Padrão ofensivo lateral muito consistente",
+    },
+    faltas:{
+      1:"Comportamento físico ainda não mapeado",
+      2:"Poucos dados de intensidade desta Copa",
+      3:"Perfil físico estimado com base histórica",
+      4:"Dois estilos físicos bem documentados",
+      5:"Padrão de faltas muito consistente e confirmado",
+    },
+  };
+  const tip = (tips[market]||tips.resultado)[normalized]||"";
+  return{score:normalized, label:labels[normalized], tip};
+}
+function stars(n){return "★".repeat(n)+"☆".repeat(5-n)}
+function winnerLabel(p,home,away){
+  if(p.h>p.a&&p.h>p.d)return home;
+  if(p.a>p.h&&p.a>p.d)return away;
+  return"Empate provável"
+}
+function icons(n){let s="";for(let i=0;i<Math.floor(n);i++)s+=`<div class="ci ci-y"></div>`;if(n%1>=.5)s+=`<div class="ci ci-h"></div>`;return s}
+
+function renderUpcomingPred(){
+  // Ordena por data/hora real extraindo dd/mm e hora da string
+  function sortKey(r){
+    const m = r.date.match(/(\d+)\/(\d+).*?(\d+)h/);
+    if(!m) return 9999;
+    return parseInt(m[2])*10000 + parseInt(m[1])*100 + parseInt(m[3]||0);
+  }
+  const upcoming = knownResults
+    .filter(r=>r.status==="scheduled"||r.status==="upcoming")
+    .sort((a,b)=>sortKey(a)-sortKey(b));
+  // Pega as datas dos 2 primeiros dias únicos disponíveis
+  const days = [...new Set(upcoming.map(r=>r.date.split('·')[0].trim()))].slice(0,2);
+  const filtered = upcoming.filter(r=>days.some(d=>r.date.startsWith(d)));
+  let lastDay='';
+  const cards = filtered.map(m=>{
+    const dayKey=m.date.split('·')[0].trim();
+    let divider='';
+    if(dayKey!==lastDay){
+      lastDay=dayKey;
+      const isFirst=days.indexOf(dayKey)===0;
+      const lbl=isFirst?'📅 HOJE':'📅 AMANHÃ';
+      divider=`<div style="display:flex;align-items:center;gap:10px;margin:${isFirst?'0':'20px'} 0 12px"><span style="font-size:11px;font-weight:800;color:#ffd75a;text-transform:uppercase;letter-spacing:.06em">${lbl} · ${dayKey}</span><div style="flex:1;height:1px;background:linear-gradient(90deg,#1a4030,transparent)"></div></div>`;
+    }
+    const p=calcProbs(m.home,m.away);
+    const proj=projectCardsAndCorners(m.home,m.away);
+    const riskLvl = proj.totalY>=3.4?"high":proj.totalY>=2.8?"med":"low";
+    const riskLbl = {high:"Alto risco disciplinar",med:"Médio risco disciplinar",low:"Baixo risco disciplinar"}[riskLvl];
+    const riskCls = {high:"bdg-high",med:"bdg-med",low:"bdg-low"}[riskLvl];
+    const dossier=getDossier(m.home,m.away);
+    const dossierBlock = dossier ? `
+      <div class="jc-dossier">
+        <div class="jc-dossier-ttl">🔍 Dossiê do confronto</div>
+        <div class="dossier-item">
+          <div class="dossier-label">⚔️ Confronto direto (histórico)</div>
+          <div class="dossier-text">${dossier.h2h}</div>
+        </div>
+        <div class="dossier-item">
+          <div class="dossier-label">📍 Como chegam nesta Copa</div>
+          <div class="dossier-text">${dossier.nowForm}</div>
+        </div>
+        <div class="dossier-item">
+          <div class="dossier-label">📚 Comportamento nas Copas de 2018 e 2022</div>
+          <div class="dossier-text">${dossier.prevCups}</div>
+        </div>
+      </div>` : '';
+    return divider+`<div class="jcard">
+      <div class="jc-meta"><span class="jc-date">${m.date} · Grupo ${m.group}${m.venue?' · '+m.venue:''}</span><div class="jc-badges"><span class="bdg bdg-blue">Favorito: ${winnerLabel(p,m.home,m.away)}</span><span class="bdg ${riskCls}">${riskLbl}</span></div></div>
+      <div class="jc-clash">
+        <div class="jc-home"><div class="jc-cname">${m.home}${flagAfter(m.home)}</div><div class="jc-ctag">Grupo ${m.group}</div></div>
+        <div class="jc-vs">vs</div>
+        <div class="jc-away"><div class="jc-cname">${flag(m.away)}${m.away}</div><div class="jc-ctag">Grupo ${m.group}</div></div>
+      </div>
+      <div class="jc-prob">
+        <div class="jc-prob-bar"><div class="pb-h" style="flex:${p.h}"></div><div class="pb-d" style="flex:${p.d}"></div><div class="pb-a" style="flex:${p.a}"></div></div>
+        <div class="jc-prob-pcts"><div class="pp-h">${p.h}%</div><div class="pp-d">Empate ${p.d}%</div><div class="pp-a">${p.a}%</div></div>
+      </div>
+      ${dossierBlock}
+      <div class="jc-stats">
+        <div class="jc-stats-ttl">Estimativa de cartões (projeção)</div>
+        <div class="jc-stats-row">
+          <div class="jc-side">
+            <div class="jc-statline"><div class="jc-stat"><div class="jc-stat-val y">${proj.splitH.toFixed(1)}</div><div class="jc-stat-lbl">amarelos</div></div></div>
+            <div class="jc-icons">${icons(proj.splitH)}</div>
+          </div>
+          <div class="jc-sdiv"></div>
+          <div class="jc-side away">
+            <div class="jc-statline"><div class="jc-stat"><div class="jc-stat-val y">${proj.splitA.toFixed(1)}</div><div class="jc-stat-lbl">amarelos</div></div></div>
+            <div class="jc-icons">${icons(proj.splitA)}</div>
+          </div>
+        </div>
+        <div class="jc-footnote">Chance de cartão vermelho na partida: ~${Math.round(proj.redChance*100)}% (Copa 2026 já tem ritmo de expulsões acima de 2018/2022 — CNN Brasil)</div>
+      </div>
+      <div class="jc-stats">
+        <div class="jc-stats-ttl">Estimativa de escanteios (projeção)</div>
+        <div class="jc-stats-row">
+          <div class="jc-side"><div class="jc-statline"><div class="jc-stat"><div class="jc-stat-val c">${proj.cornersH.toFixed(1)}</div><div class="jc-stat-lbl">escanteios</div></div></div></div>
+          <div class="jc-sdiv"></div>
+          <div class="jc-side away"><div class="jc-statline"><div class="jc-stat"><div class="jc-stat-val c">${proj.cornersA.toFixed(1)}</div><div class="jc-stat-lbl">escanteios</div></div></div></div>
+        </div>
+        <div class="jc-footnote">Baseado na média histórica de Copas do Mundo (~10–11 escanteios/jogo)</div>
+      </div>
+      <div class="jc-stats">
+        <div class="jc-stats-ttl">Potencial de faltas cometidas (projeção)</div>
+        <div class="fouls-row">
+          <div class="fouls-side">
+            <div class="fouls-team">${m.home}</div>
+            <div class="fouls-bar-track"><div class="fouls-bar-fill" style="width:${Math.min(100,proj.foulsH/18*100)}%"></div></div>
+            <div class="fouls-val">${proj.foulsH.toFixed(1)}</div>
+          </div>
+          <div class="fouls-mid">faltas/<br>jogo</div>
+          <div class="fouls-side away">
+            <div class="fouls-team">${m.away}</div>
+            <div class="fouls-bar-track"><div class="fouls-bar-fill" style="width:${Math.min(100,proj.foulsA/18*100)}%"></div></div>
+            <div class="fouls-val">${proj.foulsA.toFixed(1)}</div>
+          </div>
+        </div>
+        <div class="jc-footnote">Total estimado: <b style="color:#ff8896">${proj.totalFouls.toFixed(1)} faltas</b> · perfil físico/tático das seleções. Mais faltas tende a puxar mais cartões.</div>
+      </div>
+      <div class="conf-section">
+        <div class="conf-ttl">🎯 Índice de confiança por mercado</div>
+        <div class="conf-grid">
+          ${["resultado","cartoes","escanteios","faltas"].map(mkt=>{
+            const ci=confidenceIndex(mkt,m.home,m.away);
+            const mktLabel={"resultado":"Resultado (vitória/empate/derrota)","cartoes":"Total de cartões","escanteios":"Total de escanteios","faltas":"Total de faltas"}[mkt];
+            const starColor=ci.score>=4?"#ffd75a":ci.score===3?"#a8c2b4":"#5d7e6f";
+            return`<div class="conf-item">
+              <div class="conf-market-col">
+                <div class="conf-market">${mktLabel}</div>
+                <div class="conf-tip">${ci.tip}</div>
+              </div>
+              <div class="conf-right">
+                <div class="conf-stars" style="color:${starColor}">${stars(ci.score)}</div>
+                <div class="conf-label ${ci.score>=4?'conf-high':ci.score===3?'conf-med':'conf-low'}">${ci.label}</div>
+              </div>
+            </div>`;
+          }).join("")}
+        </div>
+      </div>
+      <div class="jc-foot">
+        <div class="jc-context">Estimativa baseada em força relativa, confronto direto e médias do torneio — projeção, não dado confirmado.</div>
+        <div class="jc-total"><div class="jc-total-lbl">Total estimado</div><div class="jc-total-y">${proj.totalY.toFixed(1)} amarelos</div><div class="jc-total-c">${proj.totalCorners.toFixed(1)} escanteios</div></div>
+      </div>
+    </div>`
+  });
+  document.getElementById("pred-out").innerHTML = cards.join("") || `<div class="empty-note">Nenhum jogo futuro carregado. Use "Sincronizar" para buscar mais confrontos.</div>`;
+}
+
+/* ════ TABS ════ */
+function switchTab(evt,id){
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+  evt.currentTarget.classList.add("active");
+  document.getElementById("tab-"+id).classList.add("active");
+}
+
+/* ════ MODAIS DE DRILL-DOWN ════ */
+function openModal(type){
+  const overlay=document.getElementById("modal-overlay");
+  const title=document.getElementById("modal-title");
+  const body=document.getElementById("modal-body");
+  const finished=knownResults.filter(r=>r.status==="finished");
+
+  if(type==="jogos"){
+    title.textContent="⚽ Jogos disputados — detalhamento";
+    const byGroup={};
+    finished.forEach(r=>{
+      if(!byGroup[r.group])byGroup[r.group]=[];
+      byGroup[r.group].push(r);
+    });
+    body.innerHTML=`
+      <div class="modal-section-ttl">Resultados por grupo</div>
+      ${Object.entries(byGroup).map(([g,gs])=>`
+        <div style="margin-bottom:14px">
+          <div style="font-size:10px;font-weight:800;color:#ffd75a;margin-bottom:6px">GRUPO ${g}</div>
+          ${gs.map(r=>`
+            <div class="modal-row">
+              <div class="modal-row-label">${flagImg(r.home)} ${r.home} × ${r.away} ${flagImg(r.away)}</div>
+              <div class="modal-row-val">${r.hg??'?'} – ${r.ag??'?'}</div>
+            </div>`).join("")}
+        </div>`).join("")}
+      <div class="modal-section-ttl">Totais desta Copa</div>
+      <div class="modal-row"><div class="modal-row-label">🏁 Jogos concluídos</div><div class="modal-row-val">${finished.length}</div></div>
+      <div class="modal-row"><div class="modal-row-label">⚽ Total de gols</div><div class="modal-row-val green">${finished.reduce((a,r)=>(r.hg??0)+(r.ag??0)+a,0)}</div></div>
+      <div class="modal-row"><div class="modal-row-label">📊 Média de gols/jogo</div><div class="modal-row-val">${(finished.reduce((a,r)=>(r.hg??0)+(r.ag??0)+a,0)/finished.length).toFixed(2)}</div></div>
+    `;
+  }
+  else if(type==="brasil"){
+    title.textContent="🇧🇷 Brasil — Copa 2026";
+    const brJogos=finished.filter(r=>r.home==="Brasil"||r.away==="Brasil");
+    const gols=brJogos.reduce((a,r)=>a+(r.home==="Brasil"?r.hg:r.ag),0);
+    const golsSofridos=brJogos.reduce((a,r)=>a+(r.home==="Brasil"?r.ag:r.hg),0);
+    body.innerHTML=`
+      <div class="modal-section-ttl">Jogos na Copa 2026</div>
+      ${brJogos.map(r=>{
+        const brGol=r.home==="Brasil"?r.hg:r.ag;
+        const advGol=r.home==="Brasil"?r.ag:r.hg;
+        const adv=r.home==="Brasil"?r.away:r.home;
+        const res=brGol>advGol?"V":brGol===advGol?"E":"D";
+        const resColor=res==="V"?"green":res==="D"?"red":"";
+        return`<div class="modal-row">
+          <div class="modal-row-label">${flagImg(adv)} ${adv} <span style="font-size:10px;color:#5d7e6f">(${r.date})</span></div>
+          <div class="modal-row-val ${resColor}">${brGol} – ${advGol} (${res})</div>
+        </div>`;}).join("")}
+      <div class="modal-section-ttl">Estatísticas parciais</div>
+      <div class="modal-row"><div class="modal-row-label">⚽ Gols marcados</div><div class="modal-row-val green">${gols}</div></div>
+      <div class="modal-row"><div class="modal-row-label">🥅 Gols sofridos</div><div class="modal-row-val red">${golsSofridos}</div></div>
+      <div class="modal-row"><div class="modal-row-label">🟨 Cartões amarelos</div><div class="modal-row-val">2</div></div>
+      <div class="modal-section-ttl">Próximos jogos</div>
+      ${knownResults.filter(r=>(r.home==="Brasil"||r.away==="Brasil")&&(r.status==="upcoming"||r.status==="scheduled")).map(r=>`
+        <div class="modal-row">
+          <div class="modal-row-label">${flag(r.home==="Brasil"?r.away:r.home)}${r.home==="Brasil"?r.away:r.home} <span style="font-size:10px;color:#5d7e6f">${r.date}</span></div>
+          <div class="modal-row-val blue">${r.venue||'—'}</div>
+        </div>`).join("")}
+    `;
+  }
+  else if(type==="artilheiro"){
+    title.textContent="🏅 Artilharia — Copa 2026";
+    const gm=goalsScoredMap();
+    const sorted=Object.entries(gm).sort((a,b)=>b[1]-a[1]).slice(0,10);
+    body.innerHTML=`
+      <div class="modal-section-ttl">Gols por seleção (dados reais confirmados)</div>
+      ${sorted.map(([t,g],i)=>`
+        <div class="modal-row">
+          <div class="modal-row-label"><span style="font-size:11px;font-weight:800;color:${i===0?'#ffd75a':i<=2?'#a8c2b4':'#5d7e6f'};min-width:18px">${i+1}.</span>${flag(t)}${t}</div>
+          <div class="modal-row-val">${g} gol${g>1?'s':''}</div>
+        </div>`).join("")}
+      <div class="modal-section-ttl">Destaques individuais confirmados</div>
+      <div class="modal-row"><div class="modal-row-label">🐐 Messi (ARG)</div><div class="modal-row-val">3 gols · hat-trick vs Argélia</div></div>
+      <div class="modal-row"><div class="modal-row-label">⚡ Haaland (NOR)</div><div class="modal-row-val">2 gols vs Iraque</div></div>
+      <div class="modal-row"><div class="modal-row-label">🎯 Mbappé (FRA)</div><div class="modal-row-val">2 gols vs Senegal</div></div>
+    `;
+  }
+  else if(type==="cartoes"){
+    title.textContent="🟨🟥 Disciplina — Copa 2026";
+    const ym=yellowCardsMap();
+    const rm=redCardsMap();
+    const totalY=Object.values(ym).reduce((a,v)=>a+v,0);
+    const totalR=Object.values(rm).reduce((a,v)=>a+v,0);
+    const sortedY=Object.entries(ym).sort((a,b)=>b[1]-a[1]);
+    body.innerHTML=`
+      <div class="modal-section-ttl">Resumo disciplinar da Copa</div>
+      <div class="modal-row"><div class="modal-row-label">🟨 Total de amarelos</div><div class="modal-row-val">${totalY}</div></div>
+      <div class="modal-row"><div class="modal-row-label">🟥 Total de vermelhos</div><div class="modal-row-val red">3</div></div>
+      <div class="modal-row"><div class="modal-row-label">📊 Média amarelos/jogo</div><div class="modal-row-val">${(totalY/finished.length).toFixed(1)}</div></div>
+      <div class="modal-section-ttl">Cartões vermelhos confirmados</div>
+      <div class="modal-row"><div class="modal-row-label">${flag("México")} César Montes (MEX)</div><div class="modal-row-val red">11/06 vs África do Sul</div></div>
+      <div class="modal-row"><div class="modal-row-label">${flag("África do Sul")} Sphephelo Sithole (RSA)</div><div class="modal-row-val red">11/06 vs México</div></div>
+      <div class="modal-row"><div class="modal-row-label">${flag("África do Sul")} Themba Zwane (RSA)</div><div class="modal-row-val red">11/06 vs México</div></div>
+      <div class="modal-section-ttl">Seleções com mais amarelos (dados parciais)</div>
+      ${sortedY.slice(0,6).map(([t,y])=>`
+        <div class="modal-row">
+          <div class="modal-row-label">${flag(t)}${t}</div>
+          <div class="modal-row-val">${y} 🟨</div>
+        </div>`).join("")}
+    `;
+  }
+  overlay.classList.add("open");
+}
+function closeModal(){
+  document.getElementById("modal-overlay").classList.remove("open");
+}
+function closeModalOutside(e){
+  if(e.target===document.getElementById("modal-overlay")) closeModal();
+}
+
+/* ════ DETECÇÃO DE JOGO AO VIVO ════ */
+function hasLiveGame(){
+  return knownResults.some(r=>r.status==="live");
+}
+function getLiveGames(){
+  return knownResults.filter(r=>r.status==="live");
+}
+
+/* ════ AUTO-CORREÇÃO DE STATUS PELO HORÁRIO DE BRASÍLIA ════
+   Se um jogo marcado como "live" ou "scheduled" já deveria ter terminado
+   (mais de 2h após o horário marcado), muda para "upcoming" para não ficar piscando errado.
+   A sincronização real vai corrigir com o placar. */
+/* ════ CONVERTE DATA DO JOGO PARA MINUTOS DESDE INÍCIO (horário Brasília) ════ */
+function getGameDiffMinutes(r){
+  // Aceita formatos: "19/06 · 16h", "19/06 · 21h30", "20/06 · 00h"
+  const m = r.date.match(/(\d{1,2})\/(\d{1,2}).*?(\d{1,2})h(\d{2})?/);
+  if(!m) return null;
+  const day=parseInt(m[1]), month=parseInt(m[2]);
+  const hour=parseInt(m[3]), min=parseInt(m[4]||0);
+  // Converte horário BRT para UTC (+3h) para criar Date UTC correto
+  const gameUTC = Date.UTC(2026, month-1, day, hour+3, min);
+  const nowBRT = new Date(new Date().toLocaleString('en-US',{timeZone:'America/Sao_Paulo'}));
+  return (nowBRT.getTime() - gameUTC) / 60000; // minutos desde o início
+}
+
+function sanitizeStatusByTime(){
+  let changed = false;
+  let hasNewLive = false;
+
+  knownResults.forEach(r=>{
+    // Pula jogos já finalizados com placar confirmado
+    if(r.status==='finished' && r.hg!=null) return;
+
+    const diffMin = getGameDiffMinutes(r);
+    if(diffMin === null) return;
+
+    const wasLive = r.status==='live';
+
+    if(diffMin >= 5 && diffMin < 120){
+      // Jogo em andamento
+      if(r.status !== 'live'){
+        r.status = 'live';
+        r.hg = r.hg ?? 0;
+        r.ag = r.ag ?? 0;
+        changed = true;
+        hasNewLive = true; // acabou de começar → dispara sync
+      }
+      // Atualiza minuto estimado para exibição
+      if(!r.minute || r.minute < Math.round(diffMin)){
+        r.minute = Math.min(90, Math.round(diffMin));
+        changed = true;
+      }
+    }
+    else if(diffMin >= 120){
+      // Jogo deveria ter terminado
+      if(r.status === 'live' || r.status === 'scheduled' || r.status === 'upcoming'){
+        r.status = 'finished';
+        changed = true;
+      }
+    }
+  });
+
+  if(changed){ renderTicker(); renderGroupBox(); }
+
+  // Se um jogo acabou de começar, sincroniza imediatamente para pegar placar real
+  if(hasNewLive){
+    console.log('Jogo iniciado — disparando sync automático');
+    syncLiveData(true);
+  }
+}
+
+/* ════ SINCRONIZAÇÃO — football-data.org (placares) + Anthropic IA (predições) ════ */
+const FOOTBALL_API_KEY = "45299c0f6b0c4378ac608d011783e099";
+const FOOTBALL_API_BASE = "https://api.football-data.org/v4";
+
+// Mapa de nomes da API → nomes no nosso app
+const teamNameMap = {
+  "Mexico":"México","South Korea":"Coreia do Sul","Czech Republic":"República Tcheca",
+  "Czechia":"República Tcheca","South Africa":"África do Sul",
+  "Bosnia and Herzegovina":"Bósnia e Herzegovina","Qatar":"Catar","Canada":"Canadá",
+  "Switzerland":"Suíça","Brazil":"Brasil","Morocco":"Marrocos","Scotland":"Escócia",
+  "Haiti":"Haiti","United States":"Estados Unidos","USA":"Estados Unidos",
+  "Australia":"Austrália","Turkey":"Turquia","Türkiye":"Turquia","Paraguay":"Paraguai",
+  "Germany":"Alemanha","Ivory Coast":"Costa do Marfim","Côte d'Ivoire":"Costa do Marfim",
+  "Ecuador":"Equador","Curaçao":"Curaçao","Sweden":"Suécia","Netherlands":"Países Baixos",
+  "Japan":"Japão","Tunisia":"Tunísia","Iran":"Irã","Islamic Republic of Iran":"Irã",
+  "Egypt":"Egito","New Zealand":"Nova Zelândia","Belgium":"Bélgica",
+  "Saudi Arabia":"Arábia Saudita","Uruguay":"Uruguai","Spain":"Espanha",
+  "Cape Verde":"Cabo Verde","France":"França","Norway":"Noruega","Senegal":"Senegal",
+  "Iraq":"Iraque","Argentina":"Argentina","Austria":"Áustria","Algeria":"Argélia",
+  "Jordan":"Jordânia","Portugal":"Portugal","DR Congo":"RD Congo",
+  "Democratic Republic of Congo":"RD Congo","Colombia":"Colômbia",
+  "Uzbekistan":"Uzbequistão","England":"Inglaterra","Croatia":"Croácia",
+  "Ghana":"Gana","Panama":"Panamá","Kosovo":"Kosovo"
+};
+function normalizeName(n){ return teamNameMap[n] || n; }
+
+// Converte status da API para nosso status
+function normalizeStatus(s){
+  if(!s) return "upcoming";
+  s = s.toUpperCase();
+  if(s==="IN_PLAY"||s==="PAUSED"||s==="HALFTIME") return "live";
+  if(s==="FINISHED"||s==="AWARDED") return "finished";
+  if(s==="TIMED"||s==="SCHEDULED") return "scheduled";
+  return "upcoming";
+}
+
+// Converte data UTC da API para horário de Brasília (BRT = UTC-3)
+function utcToBRT(utcStr){
+  if(!utcStr) return "";
+  const d = new Date(utcStr);
+  const brt = new Date(d.getTime() - 3*60*60*1000);
+  const day = String(brt.getUTCDate()).padStart(2,"0");
+  const month = String(brt.getUTCMonth()+1).padStart(2,"0");
+  const hour = String(brt.getUTCHours()).padStart(2,"0");
+  const min = String(brt.getUTCMinutes()).padStart(2,"0");
+  return `${day}/${month} · ${hour}h${min!=="00"?min:""}`;
+}
+
+let isSyncing=false;
+async function syncLiveData(silent=false){
+  if(isSyncing) return;
+  isSyncing=true;
+
+  const dot=document.getElementById("sync-dot");
+  const label=document.getElementById("sync-label");
+  const banner=document.getElementById("live-banner");
+  const bannerTxt=document.getElementById("live-banner-txt");
+
+  dot.classList.add("syncing");
+  if(!silent) label.textContent="Sincronizando...";
+
+  try{
+    // Busca jogos da Copa 2026: ao vivo + hoje + amanhã
+    const today = new Date();
+    const brtNow = new Date(today.getTime() - 3*60*60*1000);
+    const fmt = d => `${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,"0")}-${String(d.getUTCDate()).padStart(2,"0")}`;
+    const tomorrow = new Date(brtNow.getTime() + 24*60*60*1000);
+    const dayAfter = new Date(brtNow.getTime() + 48*60*60*1000);
+
+    // Busca jogos dos últimos 3 dias + próximos 2 dias para pegar resultados recentes
+    const past3 = new Date(brtNow.getTime() - 3*24*60*60*1000);
+    // Tenta Netlify Function primeiro (se disponível via GitHub deploy)
+    // Se não, usa football-data.org via múltiplos proxies CORS públicos
+    const targetUrl = `${FOOTBALL_API_BASE}/competitions/WC/matches?dateFrom=${fmt(past3)}&dateTo=${fmt(dayAfter)}`;
+    let data = null;
+
+    // 1ª tentativa: Netlify Function (funciona quando deployado via GitHub)
+    try {
+      const r1 = await fetch(`/.netlify/functions/matches?dateFrom=${fmt(past3)}&dateTo=${fmt(dayAfter)}`);
+      if(r1.ok){ data = await r1.json(); console.log("Netlify Function OK"); }
+    } catch(e){ console.log("Netlify Function indisponível:", e.message); }
+
+    // 2ª tentativa: corsproxy.io
+    if(!data) try {
+      const r2 = await fetch(`https://corsproxy.io/?${encodeURIComponent(targetUrl)}`,
+        { headers:{"X-Auth-Token": FOOTBALL_API_KEY} });
+      if(r2.ok){ data = await r2.json(); console.log("corsproxy.io OK"); }
+    } catch(e){ console.log("corsproxy falhou:", e.message); }
+
+    // 3ª tentativa: thingproxy
+    if(!data) try {
+      const r3 = await fetch(`https://thingproxy.freeboard.io/fetch/${targetUrl}`,
+        { headers:{"X-Auth-Token": FOOTBALL_API_KEY} });
+      if(r3.ok){ data = await r3.json(); console.log("thingproxy OK"); }
+    } catch(e){ console.log("thingproxy falhou:", e.message); }
+
+    // 4ª tentativa: allorigins (passa chave na URL — menos seguro mas funciona)
+    if(!data) try {
+      const urlComChave = targetUrl + `&authToken=${FOOTBALL_API_KEY}`;
+      const r4 = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`,
+        { headers:{"X-Auth-Token": FOOTBALL_API_KEY} });
+      if(r4.ok){
+        const wrapped = await r4.json();
+        data = JSON.parse(wrapped.contents);
+        console.log("allorigins OK");
+      }
+    } catch(e){ console.log("allorigins falhou:", e.message); }
+
+    if(!data) throw new Error("Todos os proxies falharam. Tente via GitHub+Netlify.");
+    console.log("Dados recebidos:", data.matches?.length, "jogos");
+    const matches = data.matches || [];
+    console.log(`football-data: ${matches.length} jogos recebidos`);
+
+    let updated = 0;
+    let liveCount = 0;
+    let summaryParts = [];
+
+    matches.forEach(m=>{
+      const home = normalizeName(m.homeTeam?.name || m.homeTeam?.shortName || "");
+      const away = normalizeName(m.awayTeam?.name || m.awayTeam?.shortName || "");
+      if(!home || !away) return;
+
+      const status = normalizeStatus(m.status);
+      const hg = m.score?.fullTime?.home ?? m.score?.halfTime?.home ?? null;
+      const ag = m.score?.fullTime?.away ?? m.score?.halfTime?.away ?? null;
+      const minute = m.minute || null;
+
+      // Monta string de marcadores a partir dos gols
+      const goals = m.goals || [];
+      const scorers = goals.length > 0
+        ? goals.map(g=>`${normalizeName(g.team?.name||"")} ${g.scorer?.name||"?"} (${g.minute||"?"}')`.trim()).join(", ")
+        : null;
+
+      // Cartões
+      const bookings = m.bookings || [];
+      const yellows = bookings.filter(b=>b.card==="YELLOW");
+      const reds = bookings.filter(b=>b.card==="RED"||b.card==="YELLOW_RED");
+      const yh = yellows.filter(b=>normalizeName(b.team?.name||"")===home).length || null;
+      const yha = yellows.filter(b=>normalizeName(b.team?.name||"")===away).length || null;
+      const rh = reds.filter(b=>normalizeName(b.team?.name||"")===home).length || 0;
+      const ra = reds.filter(b=>normalizeName(b.team?.name||"")===away).length || 0;
+
+      const dateBRT = utcToBRT(m.utcDate);
+
+      // Grupo — a API retorna stage/group
+      const grpRaw = m.group || "";
+      const grpMatch = grpRaw.match(/GROUP_([A-L])/i);
+      const group = grpMatch ? grpMatch[1].toUpperCase() : (m.stage||"").includes("GROUP") ? "?" : null;
+
+      // Gol mais rápido
+      const sortedGoals = [...goals].sort((a,b)=>(a.minute||999)-(b.minute||999));
+      const fastGoal = sortedGoals[0];
+
+      const incoming = {
+        group, home, away, hg, ag, status,
+        date: dateBRT,
+        minute, scorers,
+        yh, yha, rh, ra,
+        source: "football-data.org",
+        fastGoalMinute: fastGoal?.minute ?? null,
+        fastGoalTeam: fastGoal ? normalizeName(fastGoal.team?.name||"") : null
+      };
+
+      const idx = knownResults.findIndex(r=>r.home===home && r.away===away);
+
+      function smartMerge(existing, inc){
+        const result = {...existing};
+        const statusOrder={upcoming:0,scheduled:1,live:2,finished:3};
+        if((statusOrder[inc.status]??-1) >= (statusOrder[result.status]??-1)){
+          result.status = inc.status;
+        }
+        if(inc.hg != null) result.hg = inc.hg;
+        if(inc.ag != null) result.ag = inc.ag;
+        if(inc.minute != null) result.minute = inc.minute;
+        if(inc.scorers) result.scorers = inc.scorers;
+        if(inc.yh != null) result.yh = inc.yh;
+        if(inc.yha != null) result.yha = inc.yha;
+        if(inc.rh != null) result.rh = inc.rh;
+        if(inc.ra != null) result.ra = inc.ra;
+        if(inc.source) result.source = inc.source;
+        if(inc.group) result.group = inc.group;
+        if(!result.date && inc.date) result.date = inc.date;
+        else if(inc.date && inc.date.length > 0) result.date = inc.date;
+        if(inc.fastGoalMinute!=null) result.fastGoalMinute=inc.fastGoalMinute;
+        if(inc.fastGoalTeam) result.fastGoalTeam=inc.fastGoalTeam;
+        return result;
+      }
+
+      if(idx>=0){
+        knownResults[idx] = smartMerge(knownResults[idx], incoming);
+      } else if(status!=="upcoming" || hg!=null){
+        knownResults.push({...incoming, note:null});
+      }
+
+      if(status==="live") liveCount++;
+      if(inc.fastGoalMinute!=null && inc.fastGoalTeam){
+        addFastGoal(inc.fastGoalTeam, inc.fastGoalMinute, `vs ${inc.fastGoalTeam===home?away:home} · football-data.org`);
+      }
+      updated++;
+    });
+
+    // Monta sumário
+    const liveGames = knownResults.filter(r=>r.status==="live");
+    const finishedToday = knownResults.filter(r=>r.status==="finished" && r.date?.includes(fmt(brtNow).substring(5,10).split("-").reverse().join("/")));
+
+    if(liveGames.length>0){
+      summaryParts.push(`🔴 AO VIVO: ${liveGames.map(r=>`${r.home} ${r.hg??0}–${r.ag??0} ${r.away}${r.minute?` (${r.minute}')`:""}`).join(" | ")}`);
+    }
+    if(finishedToday.length>0){
+      summaryParts.push(`✅ Encerrados hoje: ${finishedToday.map(r=>`${r.home} ${r.hg}–${r.ag} ${r.away}`).join(" | ")}`);
+    }
+
+    if(summaryParts.length>0){
+      bannerTxt.textContent = summaryParts.join("  ·  ");
+      banner.style.display="block";
+    }
+
+    // Re-renderiza tudo
+    renderTicker();
+    renderGroupBox();
+    renderUpcomingPred();
+    renderHistory();
+    renderRankBoard();
+    renderTop10();
+    renderRankAnalysis();
+    document.getElementById("m-played").textContent=knownResults.filter(r=>r.status==="finished").length;
+
+    // Atualiza timestamp e botão
+    lastSync=new Date();
+    const ts=lastSync.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    const dateStr=lastSync.toLocaleDateString('pt-BR',{timeZone:'America/Sao_Paulo',day:'2-digit',month:'2-digit'});
+    document.getElementById("sync-timestamp").textContent=`${dateStr} às ${ts}`;
+    document.getElementById("phase-day").textContent=lastSync.toLocaleDateString('pt-BR',{timeZone:'America/Sao_Paulo',weekday:'long',day:'numeric',month:'long'});
+    label.textContent=hasLiveGame()?"🔴 Ao vivo":"Sincronizar";
+    dot.style.background=hasLiveGame()?"#ff4d5e":"#3ddc84";
+    dot.style.boxShadow=hasLiveGame()?"0 0 8px #ff4d5e":"0 0 6px #3ddc84";
+
+    console.log(`Sync OK: ${updated} jogos processados, ${liveCount} ao vivo`);
+
+  }catch(e){
+    console.error("Sync error:", e.message);
+    if(!silent){
+      label.textContent="Tentar de novo";
+      bannerTxt.textContent=`Erro ao sincronizar: ${e.message}`;
+      banner.style.display="block";
+    } else {
+      label.textContent="Sincronizar";
+    }
+  }finally{
+    dot.classList.remove("syncing");
+    isSyncing=false;
+    scheduleNextSync();
+  }
+}
+
+/* ════ AUTO-SYNC ADAPTATIVO ════
+   - Ao vivo: a cada 2 min
+   - Jogo prestes a começar (<10min): a cada 1 min
+   - Sem jogo: a cada 5 min
+   - Aba oculta: pausa, retoma ao voltar */
+let autoSyncTimeout=null;
+function scheduleNextSync(){
+  if(autoSyncTimeout) clearTimeout(autoSyncTimeout);
+  if(document.visibilityState!=="visible") return;
+
+  const soonGame = knownResults.some(r=>{
+    if(r.status!=="upcoming" && r.status!=="scheduled") return false;
+    const diff = getGameDiffMinutes(r);
+    return diff !== null && diff > -10 && diff < 5;
+  });
+
+  let interval;
+  if(hasLiveGame())   interval = 2*60*1000;  // ao vivo → 2 min
+  else if(soonGame)   interval = 1*60*1000;  // prestes a começar → 1 min
+  else                interval = 5*60*1000;  // parado → 5 min
+
+  autoSyncTimeout = setTimeout(()=>syncLiveData(true), interval);
+}
+
+function startAutoSync(){
+  setTimeout(()=>syncLiveData(true), 1500);
+}
+
+// Retoma sync ao voltar para a aba
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==="visible"){
+    // Se faz mais de 2 min sem sync, sincroniza imediatamente
+    if(!lastSync || (Date.now()-lastSync.getTime())>2*60*1000){
+      syncLiveData(true);
+    } else {
+      scheduleNextSync();
+    }
+  } else {
+    // Aba ficou oculta — cancela timer
+    if(autoSyncTimeout){ clearTimeout(autoSyncTimeout); autoSyncTimeout=null; }
+  }
+});
+
+/* ════ INIT ════ */
+renderTicker();
+renderGroupTabs();
+renderGroupBox();
+renderUpcomingPred();
+renderHistory();
+renderRankCatTabs();
+renderRankBoard();
+renderTop10();
+renderRankAnalysis();
+sanitizeStatusByTime(); // corrige status pelo horário ao abrir
+setInterval(sanitizeStatusByTime, 30*1000); // verifica a cada 30 segundos
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', async ()=>{
+    try {
+      const reg = await navigator.serviceWorker.register('./sw.js');
+
+      // Força verificação de atualização do SW a cada abertura
+      reg.update();
+
+      // Quando um novo SW é encontrado, ativa imediatamente sem esperar
+      reg.addEventListener('updatefound', ()=>{
+        const newSW = reg.installing;
+        newSW.addEventListener('statechange', ()=>{
+          if(newSW.state === 'installed' && navigator.serviceWorker.controller){
+            // Novo SW instalado — mostra banner para o usuário atualizar
+            document.getElementById('update-banner').classList.add('show');
+          }
+        });
+      });
+    } catch(e) {
+      console.log('SW registration failed:', e);
+    }
+  });
+
+  // Quando o SW assume o controle (primeira instalação), sincroniza
+  navigator.serviceWorker.addEventListener('controllerchange', ()=>{
+    syncLiveData(false);
+  });
+}
+
+// Sync imediato ao abrir o app
+startAutoSync();
+</script>
+</body>
+</html>
