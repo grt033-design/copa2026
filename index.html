@@ -305,7 +305,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="phase-val">Fase de Grupos · Todos os 12 grupos estrearam</div>
     </div>
     <div class="phase-right">
-      <div class="phase-day">Quinta, 18 de junho</div>
+      <div class="phase-day" id="phase-day"></div>
       <div class="phase-count" id="sync-timestamp">não sincronizado</div>
     </div>
   </div>
@@ -1666,6 +1666,21 @@ renderRankCatTabs();
 renderRankBoard();
 renderTop10();
 renderRankAnalysis();
+// Atualiza data/hora de Brasília imediatamente ao abrir
+(function(){
+  const now = new Date();
+  const brtDate = now.toLocaleDateString('pt-BR',{
+    timeZone:'America/Sao_Paulo',
+    weekday:'long', day:'numeric', month:'long'
+  });
+  document.getElementById('phase-day').textContent = brtDate;
+  // Atualiza a cada minuto
+  setInterval(()=>{
+    document.getElementById('phase-day').textContent = new Date().toLocaleDateString('pt-BR',{
+      timeZone:'America/Sao_Paulo',weekday:'long',day:'numeric',month:'long'
+    });
+  }, 60000);
+})();
 sanitizeStatusByTime(); // corrige status pelo horário ao abrir
 setInterval(sanitizeStatusByTime, 30*1000); // verifica a cada 30 segundos
 
