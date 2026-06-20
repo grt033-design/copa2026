@@ -1553,8 +1553,8 @@ async function syncLiveData(silent=false){
       }
 
       if(status==="live") liveCount++;
-      if(inc.fastGoalMinute!=null && inc.fastGoalTeam){
-        addFastGoal(inc.fastGoalTeam, inc.fastGoalMinute, `vs ${inc.fastGoalTeam===home?away:home} · football-data.org`);
+      if(incoming.fastGoalMinute!=null && incoming.fastGoalTeam){
+        addFastGoal(incoming.fastGoalTeam, incoming.fastGoalMinute, `vs ${incoming.fastGoalTeam===home?away:home} · football-data.org`);
       }
       updated++;
     });
