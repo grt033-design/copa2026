@@ -1,21 +1,67 @@
-{
-  "name": "Copa do Mundo 2026 — Painel ao Vivo",
-  "short_name": "Copa 2026",
-  "description": "Grupos, resultados reais, chaveamento, cartões e escanteios da Copa do Mundo 2026",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "orientation": "portrait-primary",
-  "background_color": "#0a1628",
-  "theme_color": "#0a1628",
-  "lang": "pt-BR",
-  "icons": [
-    { "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='32' fill='%230a1628'/><text x='96' y='130' font-size='100' text-anchor='middle' font-family='system-ui'>🏆</text></svg>", "sizes":"192x192", "type":"image/svg+xml", "purpose":"any maskable" },
-    { "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='80' fill='%230a1628'/><text x='256' y='360' font-size='280' text-anchor='middle' font-family='system-ui'>🏆</text></svg>", "sizes":"512x512", "type":"image/svg+xml", "purpose":"any maskable" }
-  ],
-  "categories": ["sports","entertainment"],
-  "shortcuts": [
-    { "name":"Grupos", "url":"./index.html#groups" },
-    { "name":"Jogos", "url":"./index.html#live" },
-    { "name":"Chaveamento", "url":"./index.html#bracket" }
-  ]
-}
+// Netlify Function: proxy para football-data.org
+// Node 18+ tem fetch nativo — sem dependências externas
+const API_KEY = "45299c0f6b0c4378ac608d011783e099";
+const BASE = "https://api.football-data.org/v4";
+
+exports.handler = async (event) => {
+  // Suporta preflight CORS
+  if(event.httpMethod === "OPTIONS"){
+    return {
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "*",
+        "Access-Control-Allow-Methods": "GET, OPTIONS"
+      },
+      body: ""
+    };
+  }
+
+  const { dateFrom, dateTo } = event.queryStringParameters || {};
+
+  if(!dateFrom || !dateTo){
+    return {
+      statusCode: 400,
+      headers: { "Access-Control-Allow-Origin": "*" },
+      body: JSON.stringify({ error: "dateFrom e dateTo são obrigatórios" })
+    };
+  }
+
+  const url = `${BASE}/competitions/WC/matches?dateFrom=${dateFrom}&dateTo=${dateTo}`;
+
+  try {
+    const res = await fetch(url, {
+      headers: {
+        "X-Auth-Token": API_KEY,
+        "Content-Type": "application/json"
+      }
+    });
+
+    if(!res.ok){
+      const txt = await res.text();
+      return {
+        statusCode: res.status,
+        headers: { "Access-Control-Allow-Origin": "*" },
+        body: JSON.stringify({ error: `API retornou ${res.status}: ${txt.substring(0,200)}` })
+      };
+    }
+
+    const data = await res.json();
+
+    return {
+      statusCode: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Cache-Control": "no-cache"
+      },
+      body: JSON.stringify(data)
+    };
+  } catch (err) {
+    return {
+      statusCode: 500,
+      headers: { "Access-Control-Allow-Origin": "*" },
+      body: JSON.stringify({ error: err.message, stack: err.stack })
+    };
+  }
+};
